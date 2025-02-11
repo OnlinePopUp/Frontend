@@ -1,4 +1,4 @@
-import Home from "@/components/Home";
+import Home from "@/components/ClientComponent/Home";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

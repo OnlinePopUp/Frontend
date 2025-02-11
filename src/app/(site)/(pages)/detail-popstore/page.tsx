@@ -1,5 +1,5 @@
 import React from "react";
-import DetailPopstore from "@/components/DetailPopstore";
+import DetailPopstore from "@/components/ClientComponent/Detailpopstore";
 
 const DetailPopstorePage = () => {
   return <DetailPopstore />;

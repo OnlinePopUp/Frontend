@@ -1,13 +1,13 @@
 "use client";
 import React from "react";
 
-import { Product } from "@/types/product";
+import { Product } from "@/components/ClientComponent/types/product";
 import { useModalContext } from "@/app/context/QuickViewModalContext";
-import { updateQuickView } from "@/redux/features/quickView-slice";
-import { addItemToCart } from "@/redux/features/cart-slice";
-import { addItemToWishlist } from "@/redux/features/wishlist-slice";
+import { updateQuickView } from "@/components/ClientComponent/redux/features/quickView-slice";
+import { addItemToCart } from "@/components/ClientComponent/redux/features/cart-slice";
+import { addItemToWishlist } from "@/components/ClientComponent/redux/features/wishlist-slice";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/redux/store";
+import { AppDispatch } from "@/components/ClientComponent/redux/store";
 import Link from "next/link";
 import Image from "next/image";
 

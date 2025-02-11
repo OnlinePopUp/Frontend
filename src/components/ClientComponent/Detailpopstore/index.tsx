@@ -1,6 +1,6 @@
 import React from "react";
 import ProductDetail from "./ProductDetail";
-import shopData from "@/components/Shop/shopData";
+import shopData from "@/components/ClientComponent/Shop/shopData";
 
 const DetailPopstore = () => {
   return (

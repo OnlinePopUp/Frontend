@@ -1,6 +1,6 @@
 "use client";
 
-import Breadcrumb from "@/components/Common/Breadcrumb";
+import Breadcrumb from "@/components/ClientComponent/Common/Breadcrumb";
 import Link from "next/link";
 import React, { useState } from "react";
 import axios from "axios";
