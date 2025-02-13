@@ -3,7 +3,7 @@ import React from "react";
 import { Product } from "@/components/ClientComponent/types/product";
 import Image from "next/image";
 import Link from "next/link";
-import { useModalContext } from "@/app/context/QuickViewModalContext";
+import { useModalContext } from "@/app/RootLayout/context/QuickViewModalContext";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/components/ClientComponent/redux/store";
 import { updateQuickView } from "@/components/ClientComponent/redux/features/quickView-slice";

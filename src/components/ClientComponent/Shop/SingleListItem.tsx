@@ -2,7 +2,7 @@
 import React from "react";
 
 import { Product } from "@/components/ClientComponent/types/product";
-import { useModalContext } from "@/app/context/QuickViewModalContext";
+import { useModalContext } from "@/app/RootLayout/context/QuickViewModalContext";
 import { updateQuickView } from "@/components/ClientComponent/redux/features/quickView-slice";
 import { addItemToCart } from "@/components/ClientComponent/redux/features/cart-slice";
 import { addItemToWishlist } from "@/components/ClientComponent/redux/features/wishlist-slice";

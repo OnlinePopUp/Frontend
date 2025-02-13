@@ -4,6 +4,7 @@ import Link from "next/link";
 
 // 섹션 컴포넌트 불러오기
 import FollowsSection from "./FollowsSection";
+import FollowsSectionList from "./FollowsSectionList";
 import LikesSection from "./LikesSection";
 import OrdersSection from "./OrdersSection";
 
@@ -15,12 +16,12 @@ const MyPage = () => {
 
       {/* Navigation Tabs */}
       <nav className="flex justify-center space-x-4 mb-8">
-        <Link href="#likes" className="px-4 py-2 rounded-md bg-gray-200 hover:bg-gray-300">
+        {/* <Link href="#likes" className="px-4 py-2 rounded-md bg-gray-200 hover:bg-gray-300">
           Likes
         </Link>
         <Link href="#orders" className="px-4 py-2 rounded-md bg-gray-200 hover:bg-gray-300">
           Orders
-        </Link>
+        </Link> */}
         <Link href="#follows" className="px-4 py-2 rounded-md bg-gray-200 hover:bg-gray-300">
           Follows
         </Link>
@@ -29,11 +30,13 @@ const MyPage = () => {
       {/* Follows Section */}
       <FollowsSection />
 
-      {/* Likes Section */}
+      <FollowsSectionList />
+
+      {/*  Likes Section
       <LikesSection />
 
-      {/* Orders Section */}
-      <OrdersSection />
+      Orders Section 
+      <OrdersSection />  */}
 
       
     </div>

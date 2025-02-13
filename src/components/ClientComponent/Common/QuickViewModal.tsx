@@ -1,12 +1,12 @@
 "use client";
 import React, { useEffect, useState } from "react";
 
-import { useModalContext } from "@/app/context/QuickViewModalContext";
+import { useModalContext } from "@/app/RootLayout/context/QuickViewModalContext";
 import { AppDispatch, useAppSelector } from "@/components/ClientComponent/redux/store";
 import { addItemToCart } from "@/components/ClientComponent/redux/features/cart-slice";
 import { useDispatch } from "react-redux";
 import Image from "next/image";
-import { usePreviewSlider } from "@/app/context/PreviewSliderContext";
+import { usePreviewSlider } from "@/app/RootLayout/context/PreviewSliderContext";
 import { resetQuickView } from "@/components/ClientComponent/redux/features/quickView-slice";
 import { updateproductDetails } from "@/components/ClientComponent/redux/features/product-details";
 

@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -9,28 +9,34 @@ import logo from "/public/logo.png";
 
 export default function Navbar() {
     return (
-        <div className="navbar">
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/js/all.min.js" integrity="sha512-b+nQTCdtTBIRIbraqNEwsjB6UvL3UEMkXnhzd8awtCYh0Kcsjl9uEgwVFVbhoj3uu1DO1ZMacNvLoyJJiNfcvg=="></script>
-            <div className="navbar-home">
+        <nav className="w-full bg-white shadow-md">
+            <div className="container mx-auto flex items-center justify-between py-4 px-6">
+                {/* 로고 */}
                 <Link href="/">
-                    <Image src={logo} alt="logo" width="210"/>
+                    <Image src={logo} alt="logo" width={210} height={50} className="cursor-pointer"/>
                 </Link>
+
+                {/* 메뉴 (카테고리 & 팝업) */}
+                <div className="hidden md:flex items-center space-x-6 text-gray-800 font-medium">
+                    <Link href="/category" className="hover:text-gray-600 transition">카테고리</Link>
+                    <Link href="/list" className="hover:text-gray-600 transition">팝업</Link>
+                </div>
+
+                {/* 검색창 */}
+                <div className="flex-grow hidden md:block">
+                    <Searchform />
+                </div>
+
+                {/* 사용자 관련 아이콘 */}
+                <div className="flex items-center space-x-6">
+                    <Link href="/cart" className="text-gray-700 hover:text-gray-500 transition">
+                        <FontAwesomeIcon icon={faCartShopping} className="text-2xl" />
+                    </Link>
+                    <Link href="/my" className="text-gray-700 hover:text-gray-500 transition">
+                        <FontAwesomeIcon icon={faUser} className="text-2xl" />
+                    </Link>
+                </div>
             </div>
-            <div className="navbar-category">
-                <Link href="/category">카테고리</Link>
-            </div>
-            <div className="navbar-popup">
-                <Link href="/list">팝업</Link>
-            </div>
-            <div>
-                <Searchform/>
-            </div>
-            <div className="navbar-cart">
-                <Link href="/my"><FontAwesomeIcon icon={faCartShopping} width="40"/></Link>
-            </div>
-            <div className="navbar-user">
-                <Link href="/my"><FontAwesomeIcon icon={faUser} width="40"/></Link>
-            </div>
-        </div>
-    )
+        </nav>
+    );
 }
