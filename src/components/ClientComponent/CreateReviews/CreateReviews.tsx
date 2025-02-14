@@ -1,12 +1,14 @@
 "use client";
 import React, { useState } from "react";
 import axios from "axios";
+import {  useRouter } from "next/navigation"; // 페이지 이동
 
 const CreateReviews = () => {
   const [title, setTitle] = useState(""); // ✅ 제목
   const [content, setContent] = useState(""); // ✅ 내용
   const [files, setFiles] = useState<FileList | null>(null); // ✅ 파일 리스트 상태
   const [loading, setLoading] = useState(false); // ✅ 로딩 상태
+  const router = useRouter();
 
   // ✅ 파일 업로드 핸들러
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,10 +56,8 @@ const CreateReviews = () => {
       console.log("✅ 게시글 작성 성공:", response.data);
       alert("게시글이 성공적으로 작성되었습니다.");
 
-      // 입력 필드 초기화
-      setTitle("");
-      setContent("");
-      setFiles(null);
+      router.push("/reviews");
+      
 
     } catch (error: any) {
       console.error("🚨 게시글 작성 실패:", error.response?.data || error.message);

@@ -19,15 +19,12 @@ const UpdateReviews = () => {
     }
   }, [boardId, accessToken]);
 
+  // ✅ 게시글 수정 요청 (FormData 방식)
   const handleUpdate = async () => {
     if (!content.trim()) {
       alert("내용을 입력해주세요.");
       return;
     }
-
-    console.log("AC", accessToken);
-    console.log("BI", boardId);
-    console.log("content", content);
 
     try {
       console.log(`🔹 서버에 POST 요청 (FormData): /post/update/${boardId}`);
@@ -41,7 +38,7 @@ const UpdateReviews = () => {
         formData, // ✅ 요청 본문을 FormData로 설정
         {
           headers: {
-            Authorization: `${accessToken}`, 
+            Authorization: `${accessToken}`,
             "Content-Type": "multipart/form-data", // ✅ FormData 전송 설정
           },
         }
@@ -49,10 +46,36 @@ const UpdateReviews = () => {
 
       console.log("✅ 게시글 수정 완료:", response.data);
       alert("게시글이 성공적으로 수정되었습니다.");
-      router.push(`/reviews/detail?boardId=${boardId}`); // ✅ 수정 후 상세 페이지로 이동
+      router.push(`/reviews`); // ✅ 수정 후 상세 페이지로 이동
     } catch (error: any) {
       console.error("🚨 게시글 수정 실패:", error.response?.data || error.message);
       alert("게시글 수정에 실패했습니다. 다시 시도해주세요.");
+    }
+  };
+
+  // ✅ 게시글 삭제 요청
+  const handleDelete = async () => {
+    if (!confirm("정말로 삭제하시겠습니까?")) return;
+
+    try {
+      console.log(`🔹 서버에 POST 요청: /post/delete/${boardId}`);
+      
+      const response = await axios.post(
+        `http://47.130.76.132:8080/post/delete/${boardId}`, 
+        {}, // ✅ POST 요청이므로 빈 객체 전송
+        {
+          headers: {
+            Authorization: `${accessToken}`, // ✅ 헤더에 accessToken 추가
+          },
+        }
+      );
+
+      console.log("✅ 게시글 삭제 완료:", response.data);
+      alert("게시글이 성공적으로 삭제되었습니다.");
+      router.push("/reviews"); // ✅ 삭제 후 리뷰 목록으로 이동
+    } catch (error: any) {
+      console.error("🚨 게시글 삭제 실패:", error.response?.data || error.message);
+      alert("게시글 삭제에 실패했습니다. 다시 시도해주세요.");
     }
   };
 
@@ -72,9 +95,17 @@ const UpdateReviews = () => {
       {/* ✅ 수정 완료 버튼 */}
       <button
         onClick={handleUpdate}
-        className="mt-4 px-6 py-3 bg-blue-400 text-black rounded-lg hover:bg-blue-600 transition-all"
+        className="mt-4 px-6 py-3 bg-yellow-light-1 text-black rounded-lg hover:bg-blue-light-2 transition-all"
       >
         수정 완료 ✅
+      </button>
+
+      {/* ✅ 글 삭제 버튼 (업데이트된 UI) */}
+      <button
+        onClick={handleDelete}
+        className="mt-4 ml-4 px-6 py-3 bg-yellow-light-1 text-black rounded-lg hover:bg-blue-light-2 transition-all"
+      >
+        🗑️ 글 삭제
       </button>
     </section>
   );

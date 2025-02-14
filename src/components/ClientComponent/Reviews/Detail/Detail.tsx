@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 
 const Detail = () => {
   const [post, setPost] = useState<any>(null);
+  const [liked, setLiked] = useState(false); // ✅ 좋아요 상태 추가
   const searchParams = useSearchParams();
   const boardId = searchParams.get("boardId");
 
@@ -23,6 +24,7 @@ const Detail = () => {
 
         if (response.data) {
           setPost(response.data);
+          setLiked(response.data.liked || false); // ✅ 좋아요 상태 저장
         } else {
           console.warn("🚨 응답 데이터가 없습니다.");
         }
@@ -33,6 +35,62 @@ const Detail = () => {
 
     fetchPostDetail();
   }, [boardId]);
+
+  // ✅ 좋아요 요청 함수
+  const handleLike = async () => {
+    const accessToken = localStorage.getItem("accessToken"); // ✅ accessToken 가져오기
+    if (!accessToken) {
+      alert("로그인이 필요합니다!");
+      return;
+    }
+
+    try {
+      console.log(`🔹 서버에 POST 요청: /post/like/${boardId}`);
+      await axios.post(
+        `http://47.130.76.132:8080/post/like/${boardId}`,
+        {}, // ✅ 요청 본문 없이 전송
+        {
+          headers: {
+            Authorization: `${accessToken}`, 
+          },
+        }
+      );
+      
+      setLiked(true); // ✅ 좋아요 상태 변경
+      alert("게시글을 좋아요 했습니다! ❤️");
+    } catch (error: any) {
+      console.error("🚨 좋아요 실패:", error.response?.data || error.message);
+      alert("좋아요에 실패했습니다. 다시 시도해주세요.");
+    }
+  };
+
+  // ✅ 좋아요 취소 요청 함수
+  const handleUnlike = async () => {
+    const accessToken = localStorage.getItem("accessToken");
+    if (!accessToken) {
+      alert("로그인이 필요합니다!");
+      return;
+    }
+
+    try {
+      console.log(`🔹 서버에 POST 요청: /post/unlike/${boardId}`);
+      await axios.post(
+        `http://47.130.76.132:8080/post/unlike/${boardId}`,
+        {},
+        {
+          headers: {
+            Authorization: `${accessToken}`,
+          },
+        }
+      );
+      
+      setLiked(false); // ✅ 좋아요 취소 상태 변경
+      alert("게시글 좋아요를 취소했습니다. 💔");
+    } catch (error: any) {
+      console.error("🚨 좋아요 취소 실패:", error.response?.data || error.message);
+      alert("좋아요 취소에 실패했습니다. 다시 시도해주세요.");
+    }
+  };
 
   return (
     <section className="max-w-3xl mx-auto p-6 bg-yellow-light-2 shadow-md rounded-lg">
@@ -45,6 +103,24 @@ const Detail = () => {
           <p className="text-xs text-meta-3 mt-4">작성자: {post.boardNickname || "알 수 없음"}</p>
           <p className="text-xs text-meta-3">게시 날짜: {post.board.created || "날짜 없음"}</p>
           <p className="text-xs text-meta-3">조회수: {post.board.cnt}</p>
+
+          {/* ✅ 좋아요 & 좋아요 취소 버튼 */}
+          <div className="flex gap-4 mt-4">
+          <button
+            onClick={handleLike}
+            className="px-4 py-2 bg-blue-500 text-black rounded-lg hover:bg-blue-light-2 transition-all"
+          >
+            ❤️ likes
+          </button>
+
+          <button
+            onClick={handleUnlike}
+            className="px-4 py-2 bg-red-500 text-black rounded-lg hover:bg-blue-light-2 transition-all"
+          >
+            💔 unlikes
+          </button>
+          </div>
+
 
           {post.boardFile?.length > 0 && (
             <div className="mt-4">

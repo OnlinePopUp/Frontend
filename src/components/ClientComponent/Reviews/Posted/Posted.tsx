@@ -121,6 +121,14 @@ const Posted = () => {
         </button>
       </div>
 
+      {/* ✅ 게시글 작성 버튼 추가 */}
+      <button
+          onClick={() => router.push("/create-reviews")} // ✅ 게시글 작성 페이지로 이동
+          className="px-4 py-2 bg-green-500 text-black rounded-lg hover:bg-blue-light-2 transition-all"
+        >
+          ✍️ 게시글 작성
+      </button>
+
       {/* ✅ 검색 바 추가 */}
       <div className="flex items-center gap-4 mb-4">
         <select
@@ -164,7 +172,7 @@ const Posted = () => {
       
             {/* ✅ 수정 버튼 UI */}
             <button
-              className="px-3 py-2 bg-blue-500 text-white text-sm rounded-lg hover:bg-blue-600 transition-all"
+              className="px-3 py-2 bg-blue-500 text-black text-sm rounded-lg hover:bg-blue-light-2 transition-all"
               onClick={() => {
                 const accessToken = localStorage.getItem("accessToken"); // ✅ LocalStorage에서 accessToken 가져오기
                 if (!accessToken) {
