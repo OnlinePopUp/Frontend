@@ -18,12 +18,12 @@ const MyPage = () => {
         <FillPoint />
       </div>
 
-      {/* Navigation Tabs */}
+      {/* Navigation Tabs
       <nav className="flex justify-center space-x-4 mb-8">
         <Link href="#follows" className="px-4 py-2 rounded-md bg-gray-200 hover:bg-gray-300">
           Follows
         </Link>
-      </nav>
+      </nav> */}
 
       {/* Follows Section */}
       <FollowsSection />

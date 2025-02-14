@@ -10,8 +10,8 @@ const ReviewsPage: React.FC = () => {
       {/* 게시글 컴포넌트 */}
       <Posted />
 
-      {/* 댓글 컴포넌트 */}
-      <Comment />
+      {/* 댓글 컴포넌트
+      <Comment /> */}
     </div>
   );
 };
