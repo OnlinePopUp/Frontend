@@ -1,5 +1,6 @@
 import React from "react";
-import Hero from "./Hero";
+import Hero from "./Hero/index";
+import LogoutButton from "@/components/ClientComponent/Home/Logout/logout"; // ✅ 로그아웃 컴포넌트 추가
 
 const heroData = [
   { title: "iPhone 14 Plus", price: "$699", originalPrice: "$999", img: "/images/hero/hero-02.png" },
@@ -10,9 +11,12 @@ const heroData = [
 
 const Home = () => {
   return (
-    <main>
+    <main className="relative">
+      {/* ✅ 우측 상단에 로그아웃 버튼 추가 */}
+      <LogoutButton />
+
       {heroData.map((item, index) => (
-        <Hero key={index} data={item} />
+        <Hero key={index} />
       ))}
     </main>
   );

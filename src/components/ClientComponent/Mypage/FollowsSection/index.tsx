@@ -47,16 +47,16 @@ const FollowSection = () => {
         const message =
           response.data && typeof response.data === "object"
             ? response.data.message
-            : "팔로우 요청 성공! (서버 응답 없음)";
+            : "팔로우 요청 성공! ";
       
         alert(message);
       
-        setFollowingList((prev) => [...prev, email]);
         setEmail(""); // 입력 필드 초기화
+        window.location.reload(); // 페이지 새로고침
       }
       
     } catch (error: any) {
-      alert(error.response?.data?.error || "팔로우 요청 실패");
+      //alert(error.response?.data?.error || "팔로우 요청 실패");
     } finally {
       setLoading(false);
     }

@@ -1,6 +1,7 @@
 import React from "react";
-import HeroCarousel from "./HeroCarousel";
-import HeroFeature from "./HeroFeature";
+import HeroCarousel from "./swappage/HeroCarousel";
+
+import HeroFeature from "./bottomtext/HeroFeature";
 import Image from "next/image";
 
 const Hero = () => {
