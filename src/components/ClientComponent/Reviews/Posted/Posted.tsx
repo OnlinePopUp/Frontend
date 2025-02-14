@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation"; // ✅ Next.js의 useRouter 추가
 
+// 검색기능 포함되어있음
+
 const Posted = () => {
   const [posts, setPosts] = useState<any[][]>([]);
   const [nicknames, setNicknames] = useState<string[][]>([]);
@@ -147,8 +149,9 @@ const Posted = () => {
 
       {posts[currentPage] && posts[currentPage].length > 0 ? (
         <ul className="space-y-4">
-          {posts[currentPage].map((post, index) => (
-            <li key={post.boardId} className="p-4 border bg-yellow-light-4 rounded-lg shadow">
+        {posts[currentPage].map((post, index) => (
+          <li key={post.boardId} className="p-4 border bg-yellow-light-4 rounded-lg shadow flex justify-between items-center">
+            <div>
               <h3 
                 className="text-lg font-medium text-blue-600 cursor-pointer hover:underline"
                 onClick={() => router.push(`/reviews/detail?boardId=${post.boardId}`)}
@@ -157,9 +160,28 @@ const Posted = () => {
               </h3>
               <p className="text-sm text-gray-600">{post.content}</p>
               <p className="text-xs text-gray-500">작성자: {nicknames[currentPage]?.[index] || "알 수 없음"}</p>
-            </li>
-          ))}
-        </ul>
+            </div>
+      
+            {/* ✅ 수정 버튼 UI */}
+            <button
+              className="px-3 py-2 bg-blue-500 text-white text-sm rounded-lg hover:bg-blue-600 transition-all"
+              onClick={() => {
+                const accessToken = localStorage.getItem("accessToken"); // ✅ LocalStorage에서 accessToken 가져오기
+                if (!accessToken) {
+                  alert("로그인이 필요합니다!"); // ✅ accessToken이 없을 경우 알림
+                  return;
+                }
+
+                const updateUrl = `/reviews/update-reviews?boardId=${post.boardId}&accessToken=${encodeURIComponent(accessToken)}`;
+                router.push(updateUrl); // ✅ 업데이트 페이지로 이동
+              }}
+            >
+              수정 ✏️
+            </button>
+          </li>
+        ))}
+      </ul>
+      
       ) : (
         <p className="text-gray-500 text-center">게시글이 없습니다.</p>
       )}

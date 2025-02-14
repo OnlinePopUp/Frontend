@@ -68,7 +68,7 @@ const CreateReviews = () => {
   };
 
   return (
-    <section className="max-w-2xl mx-auto p-6 bg-white shadow-md rounded-lg">
+    <section className="max-w-2xl mx-auto p-6 bg-yellow-light-2 shadow-md rounded-lg">
       <h2 className="text-2xl font-semibold mb-6 text-center">후기글 작성</h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -128,7 +128,7 @@ const CreateReviews = () => {
           className="w-full bg-blue-600 text-black font-medium py-3 rounded-lg hover:bg-blue transition-all duration-200"
           disabled={loading}
         >
-          {loading ? "작성 중..." : "제출하기"}
+          {loading ? "작성 중..." : "submit"}
         </button>
       </form>
     </section>

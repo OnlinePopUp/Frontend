@@ -1,5 +1,7 @@
 "use client";
 
+// Posted만 렌더링함
+
 import React from "react";
 import Posted from "./Posted/Posted";
 import Comment from "./Comment/Comment";
