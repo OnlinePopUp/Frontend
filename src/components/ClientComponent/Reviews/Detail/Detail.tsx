@@ -2,10 +2,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useSearchParams } from "next/navigation";
+import Comment from "../Comment/Comment"; // ✅ Comment 컴포넌트 import
 
 const Detail = () => {
   const [post, setPost] = useState<any>(null);
   const [liked, setLiked] = useState(false); // ✅ 좋아요 상태 추가
+  const [isCommentPopupOpen, setIsCommentPopupOpen] = useState(false); // ✅ 댓글 팝업 상태 추가
   const searchParams = useSearchParams();
   const boardId = searchParams.get("boardId");
 
@@ -59,12 +61,12 @@ const Detail = () => {
       setLiked(true); // ✅ 좋아요 상태 변경
       alert("게시글을 좋아요 했습니다! ❤️");
     } catch (error: any) {
-      console.error("🚨 좋아요 실패:", error.response?.data || error.message);
-      alert("좋아요에 실패했습니다. 다시 시도해주세요.");
+      // console.error("🚨 좋아요 실패:", error.response?.data || error.message);
+      alert("이미 좋아요 누른 게시물입니다.");
     }
   };
 
-  // ✅ 좋아요 취소 요청 함수
+   // ✅ 좋아요 취소 요청 함수
   const handleUnlike = async () => {
     const accessToken = localStorage.getItem("accessToken");
     if (!accessToken) {
@@ -73,9 +75,9 @@ const Detail = () => {
     }
 
     try {
-      console.log(`🔹 서버에 POST 요청: /post/unlike/${boardId}`);
+      console.log(`🔹 서버에 POST 요청: /post/delete/like/${boardId}`);
       await axios.post(
-        `http://47.130.76.132:8080/post/unlike/${boardId}`,
+        `http://47.130.76.132:8080/post/delete/like/${boardId}`,
         {},
         {
           headers: {
@@ -83,12 +85,11 @@ const Detail = () => {
           },
         }
       );
-      
+
       setLiked(false); // ✅ 좋아요 취소 상태 변경
       alert("게시글 좋아요를 취소했습니다. 💔");
     } catch (error: any) {
-      console.error("🚨 좋아요 취소 실패:", error.response?.data || error.message);
-      alert("좋아요 취소에 실패했습니다. 다시 시도해주세요.");
+      alert("좋아요 하지 않은 게시물입니다");
     }
   };
 
@@ -114,11 +115,11 @@ const Detail = () => {
           </button>
 
           <button
-            onClick={handleUnlike}
-            className="px-4 py-2 bg-red-500 text-black rounded-lg hover:bg-blue-light-2 transition-all"
-          >
-            💔 unlikes
-          </button>
+              onClick={handleUnlike}
+              className="px-4 py-2 bg-red-500 text-black rounded-lg hover:bg-blue-light-2 transition-all"
+            >
+              💔 unlikes
+            </button>
           </div>
 
 
@@ -134,23 +135,40 @@ const Detail = () => {
           )}
 
           <div className="mt-6">
-            <h4 className="text-sm font-semibold text-dark-3">댓글</h4>
+            {/* ✅ 댓글 작성 버튼 */}
+            <button
+              onClick={() => setIsCommentPopupOpen(true)} // ✅ 팝업 열기
+              className="mt-4 px-6 py-3 bg-blue-500 text-black rounded-lg hover:bg-blue-light-2 transition-all"
+            >
+              ✍️ 댓글 작성
+            </button>
+
             {post.comment?.length > 0 ? (
-              <ul className="mt-2 space-y-2">
-                {post.comment.map((comment: string, index: number) => (
-                  <li key={index} className="p-3 bg-gray-DEFAULT rounded-lg">
-                    <p className="text-sm text-gray-900">{comment}</p>
-                    <p className="text-xs text-meta-5">작성자: {post.commentNickname[index] || "알 수 없음"}</p>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-xs text-meta-5 mt-2">댓글이 없습니다.</p>
+                <ul className="mt-2 space-y-2">
+                  {/* ❌ 기존: 댓글 리스트 매핑 (현재 GET 요청이 없으므로 주석 처리) */}
+                  {/* {post.comment.map((comment: string, index: number) => (
+                    <li key={index} className="p-3 bg-gray-DEFAULT rounded-lg">
+                      <p className="text-sm text-gray-900">{comment}</p>
+                      <p className="text-xs text-meta-5">작성자: {post.commentNickname[index] || "알 수 없음"}</p>
+                    </li>
+                  ))} */}
+
+                  {/* ✅ GET 요청이 없으므로 "댓글이 없습니다."만 출력 */}
+                  <p className="text-xs text-meta-5 mt-2">댓글이 없습니다.</p>
+                </ul>
+              ) : (
+                <p className="text-xs text-meta-5 mt-2">댓글이 없습니다.</p>
             )}
+
           </div>
         </div>
       ) : (
         <p className="text-gray-500 text-center">게시글 정보를 불러오는 중...</p>
+      )}
+
+       {/* ✅ 댓글 작성 팝업 (isCommentPopupOpen이 true일 때만 렌더링) */}
+      {isCommentPopupOpen && (
+        <Comment boardId={boardId} closePopup={() => setIsCommentPopupOpen(false)} />
       )}
     </section>
   );
