@@ -1,39 +1,58 @@
 "use client";
-import React from "react";
-import Link from "next/link";
-
-// 섹션 컴포넌트 불러오기
-import FillPoint from "./FillPoint"; // ✅ 포인트 충전 컴포넌트 추가
-import FollowsSection from "./FollowsSection";
+import React, { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import FillPoint from "./FillPoint";
+import FollowsSection from "./FollowsSearch";
 import FollowsSectionList from "./FollowsSectionList";
-import DropMember from "./DropMember"; // ✅ 회원 탈퇴 컴포넌트 추가
+import DropMember from "./DropMember";
+import FollowBox from "./FollowBox"; // ✅ FollowBox 추가
 
 const MyPage = () => {
+  const searchParams = useSearchParams();
+  const urlEmail = searchParams.get("email"); // ✅ URL에서 email 가져오기
+  const [localEmail, setLocalEmail] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true); // ✅ 로딩 상태 추가
+
+  useEffect(() => {
+    // ✅ localStorage에서 userEmail 가져오기
+    const storedEmail = localStorage.getItem("userEmail"); // ✅ 변경된 부분
+    setLocalEmail(storedEmail);
+    setIsLoading(false); // ✅ 데이터 로딩 완료
+    console.log("📌 localStorage userEmail:", storedEmail);
+    console.log("📌 URL email:", urlEmail);
+  }, []);
+
+  // ✅ 데이터 로딩 중이면 화면에 아무것도 렌더링하지 않음
+  if (isLoading) return <p className="text-center text-gray-500">로딩 중...</p>;
+
   return (
     <div className="max-w-4xl mx-auto p-6">
       <h1 className="text-3xl font-bold mb-6 text-center">My Page</h1>
 
-      {/* ✅ 포인트 충전 기능 (최상단 배치) */}
-      <div className="mb-6">
-        <FillPoint />
-      </div>
+      {/* ✅ URL email과 localStorage userEmail이 다른 경우에만 FollowBox 표시 */}
+      {urlEmail !== localEmail && <FollowBox />}
 
-      {/* Navigation Tabs
-      <nav className="flex justify-center space-x-4 mb-8">
-        <Link href="#follows" className="px-4 py-2 rounded-md bg-gray-200 hover:bg-gray-300">
-          Follows
-        </Link>
-      </nav> */}
+      {/* ✅ URL email과 localStorage userEmail이 일치하는 경우 */}
+      {urlEmail === localEmail ? (
+        <>
+          {/* ✅ 포인트 충전 */}
+          <div className="mb-6">
+            <FillPoint />
+          </div>
 
-      {/* Follows Section */}
-      <FollowsSection />
-      <FollowsSectionList />
+          {/* ✅ Follows Section */}
+          <FollowsSection />
+          <FollowsSectionList />
 
-      {/* ✅ 회원 탈퇴 버튼 추가 */}
-      <div className="mt-10 flex justify-center">
-        <DropMember />
-      </div>
-
+          {/* ✅ 회원 탈퇴 */}
+          <div className="mt-10 flex justify-center">
+            <DropMember />
+          </div>
+        </>
+      ) : (
+        // ✅ 일치하지 않으면 FollowsSectionList만 렌더링
+        <FollowsSectionList />
+      )}
     </div>
   );
 };
