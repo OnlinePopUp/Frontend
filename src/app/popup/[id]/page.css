@@ -1,0 +1,34 @@
+@font-face {
+    font-family: 'NanumHumanTTFBold';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2501-1@1.1/NanumHumanTTFBold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+}
+@font-face {
+  font-family: 'SBAggroB';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SBAggroB.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.eachPopupPage {
+    position: relative;
+    width: 100%;
+    height: auto;
+    overflow-y: scroll;
+}
+
+.popupMainPic {
+    width: 100%;
+    object-fit: cover;
+    opacity: 1000;
+}
+
+pre {
+    font-family: 'SBAggroB';
+    display: inline;
+}
+
+p {
+    font-family: 'SBAggroB';
+}
