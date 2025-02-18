@@ -1,5 +1,4 @@
 import React from "react";
-import Hero from "./Hero/index";
 import LogoutButton from "@/components/ClientComponent/Home/Logout/logout"; // ✅ 로그아웃 컴포넌트 추가
 
 const heroData = [
@@ -15,9 +14,7 @@ const Home = () => {
       {/* ✅ 우측 상단에 로그아웃 버튼 추가 */}
       <LogoutButton />
 
-      {heroData.map((item, index) => (
-        <Hero key={index} />
-      ))}
+      
     </main>
   );
 };
