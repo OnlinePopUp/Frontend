@@ -13,6 +13,7 @@ const Detail = () => {
   const searchParams = useSearchParams();
   const boardId = searchParams.get("boardId");
   const router = useRouter(); // ✅ Next.js 라우터 추가
+  const userEmail = localStorage.getItem("userEmail"); // ✅ 현재 로그인한 사용자 이메일 가져오기
 
   useEffect(() => {
     const fetchPostDetail = async () => {
@@ -156,6 +157,39 @@ const Detail = () => {
     }
   };
 
+  // ✅ 댓글 삭제 요청 함수
+  const handleDeleteComment = async (cmtId: number) => {
+    const accessToken = localStorage.getItem("accessToken");
+    if (!accessToken) {
+      alert("로그인이 필요합니다!");
+      return;
+    }
+
+    if (!confirm("정말로 이 댓글을 삭제하시겠습니까?")) return;
+
+    try {
+      console.log(`🔹 서버에 POST 요청: /comment/delete/${cmtId}`);
+      await axios.post(`http://47.130.76.132:8080/comment/delete/${cmtId}`, {}, {
+        headers: {
+          Authorization: `${accessToken}`,
+        },
+      });
+
+      alert("댓글이 성공적으로 삭제되었습니다! ❌");
+
+      // ✅ UI 업데이트 (삭제된 댓글 제거)
+      setPost((prevPost: any) => {
+        const updatedComments = prevPost.comment.filter((c: any) => c.cmtId !== cmtId);
+        return { ...prevPost, comment: updatedComments };
+      });
+
+    } catch (error: any) {
+      console.error("🚨 댓글 삭제 실패:", error.response?.data || error.message);
+      alert("댓글 삭제에 실패했습니다. 다시 시도해주세요.");
+    }
+  };
+
+
   return (
     <section className="max-w-3xl mx-auto p-6 bg-yellow-light-2 shadow-md rounded-lg">
       <h2 className="text-2xl font-semibold mb-6 text-dark-DEFAULT text-center">게시글 상세 보기</h2>
@@ -205,44 +239,78 @@ const Detail = () => {
 
             {/* ✅ 댓글 리스트 */}
             {post.comment?.length > 0 ? (
-              <ul className="mt-2 space-y-2">
-                {post.comment.map((comment: any, index: number) => (
-                  <li key={index} className="p-3 bg-gray-DEFAULT rounded-lg flex justify-between items-center">
-                    <div>
-                      <p className="text-sm text-gray-900">{comment.content || "내용 없음"}</p>
-                      <p className="text-xs text-meta-5">작성자: {post.commentNickname?.[index] || "알 수 없음"}</p>
-                    </div>
-
-                    {/* ✅ 댓글 좋아요, 좋아요 취소, 수정 버튼 */}
-                    <div className="flex gap-2">
-                    <button 
-                      onClick={() => handleLikeComment(comment.cmtId)} 
-                      className="px-3 py-2 bg-blue-500 text-black text-sm rounded-lg hover:bg-blue-light-2 transition-all"
+                <ul className="mt-2 space-y-2">
+                  {post.comment.map((comment: any, index: number) => (
+                    <li 
+                      key={index} 
+                      className="p-3 bg-gray-DEFAULT rounded-lg flex justify-between items-center cursor-pointer hover:bg-gray-200 transition"
+                      onClick={() => router.push(`/mypage?email=${comment.email}`)} // ✅ 댓글 클릭 시 마이페이지 이동
                     >
-                      ❤️ 좋아요 ({comment.heart})
-                    </button>
-                    
-                      <button onClick={() => handleUnlikeComment(comment.cmtId)} className="px-3 py-2 bg-red-500 text-black text-sm rounded-lg">
-                        💔 좋아요 취소
-                      </button>
+                      <div>
+                        <p className="text-sm text-gray-900">{comment.content || "내용 없음"}</p>
+                        <p className="text-xs text-meta-5">작성자: {post.commentNickname?.[index] || "알 수 없음"}</p>
+                      </div>
 
-                      <button
-                        className="px-3 py-2 bg-yellow-500 text-black text-sm rounded-lg hover:bg-blue-light-2 transition-all"
-                        onClick={() => {
-                          setIsCommentPopupOpen(true);
-                          setIsEditing(true); // ✅ 수정 모드
-                          setEditingComment({ cmtId: comment.cmtId, content: comment.content }); // ✅ 수정할 댓글 정보 저장
-                        }}
-                      >
-                        ✏️ 수정
-                      </button>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-xs text-meta-5 mt-2">댓글이 없습니다.</p>
-            )}
+                      {/* ✅ 댓글 좋아요, 좋아요 취소, 수정 버튼 */}
+                      <div className="flex gap-2">
+                        <button 
+                          onClick={(e) => {
+                            e.stopPropagation(); // ✅ 부모 클릭 이벤트 방지 (마이페이지 이동 방지)
+                            handleLikeComment(comment.cmtId);
+                          }} 
+                          className="px-3 py-2 bg-blue-500 text-black text-sm rounded-lg hover:bg-blue-light-2 transition-all"
+                        >
+                          ❤️ 좋아요 ({comment.heart})
+                        </button>
+
+                        <button 
+                          onClick={(e) => {
+                            e.stopPropagation(); // ✅ 부모 클릭 이벤트 방지 (마이페이지 이동 방지)
+                            handleUnlikeComment(comment.cmtId);
+                          }} 
+                          className="px-3 py-2 bg-red-500 text-black text-sm rounded-lg"
+                        >
+                          💔 좋아요 취소
+                        </button>
+
+                        {/* ✅ 현재 로그인한 유저와 댓글 작성자가 일치할 때만 수정 버튼 보이기 */}
+                        {/* ✅ 현재 로그인한 유저와 댓글 작성자가 일치할 때만 수정 & 삭제 버튼 보이기 */}
+                        {userEmail === comment.email && (
+                          <div className="flex gap-2">
+                            {/* ✅ 수정 버튼 */}
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation(); // ✅ 부모 클릭 이벤트 방지 (마이페이지 이동 방지)
+                                setIsCommentPopupOpen(true);
+                                setIsEditing(true); // ✅ 수정 모드 활성화
+                                setEditingComment({ cmtId: comment.cmtId, content: comment.content }); // ✅ 수정할 댓글 정보 저장
+                              }}
+                              className="px-3 py-2 bg-yellow-500 text-black text-sm rounded-lg hover:bg-blue-light-2 transition-all"
+                            >
+                              ✏️ 수정
+                            </button>
+
+                            {/* ✅ 삭제 버튼 */}
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation(); // ✅ 부모 클릭 이벤트 방지 (마이페이지 이동 방지)
+                                handleDeleteComment(comment.cmtId); // ✅ 삭제 함수 호출
+                              }}
+                              className="px-3 py-2 bg-red-500 text-black text-sm rounded-lg hover:bg-red-700 transition-all"
+                            >
+                              ❌ 삭제
+                            </button>
+                          </div>
+                        )}
+
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-xs text-meta-5 mt-2">댓글이 없습니다.</p>
+              )}
+
           </div>
         </div>
       ) : (

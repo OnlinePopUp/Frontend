@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import Follow from "./Follow"; // ✅ Follow 컴포넌트 import
 import Follower from "./Follower"; // ✅ Follower 컴포넌트 import
 import PostWritten from "./PostWritten"; // ✅ PostWritten 컴포넌트 import
+import LikePost from "./LikePost"; // ✅ 좋아요한 게시글 컴포넌트 추가
 
 const FollowsSectionList = () => {
   const searchParams = useSearchParams();
@@ -18,7 +19,7 @@ const FollowsSectionList = () => {
   const [followerEmails, setFollowerEmails] = useState<string[]>([]);
   const [followerCount, setFollowerCount] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [selectedTab, setSelectedTab] = useState<"follow" | "follower" | "posts">("follow"); // ✅ 선택된 탭 상태 확장
+  const [selectedTab, setSelectedTab] = useState<"follow" | "follower" | "posts" | "likeposts">("follow"); // ✅ "likeposts" 추가
 
   // ✅ localStorage에서 사용자 정보 가져오기
   useEffect(() => {
@@ -132,6 +133,12 @@ const FollowsSectionList = () => {
         >
           작성한 게시글
         </button>
+        <button
+          className={`px-4 py-2 rounded-lg ${selectedTab === "likeposts" ? "bg-blue-500 text-white" : "bg-gray-300 text-black"}`}
+          onClick={() => setSelectedTab("likeposts")}
+        >
+          좋아요한 게시글
+        </button>
       </div>
 
       {loading ? (
@@ -157,6 +164,7 @@ const FollowsSectionList = () => {
             />
           )}
           {selectedTab === "posts" && <PostWritten />}
+          {selectedTab === "likeposts" && <LikePost />}
         </>
       )}
     </section>

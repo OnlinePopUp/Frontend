@@ -6,6 +6,7 @@ import FollowsSection from "./FollowsSearch";
 import FollowsSectionList from "./FollowsSectionList";
 import DropMember from "./DropMember";
 import FollowBox from "./FollowBox"; // ✅ FollowBox 추가
+import PaymentList from "./PaymentList";
 
 const MyPage = () => {
   const searchParams = useSearchParams();
@@ -44,6 +45,8 @@ const MyPage = () => {
           <FollowsSection />
           <FollowsSectionList />
 
+          {/* ✅ Payment List */}
+          <PaymentList />
           {/* ✅ 회원 탈퇴 */}
           <div className="mt-10 flex justify-center">
             <DropMember />

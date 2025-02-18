@@ -44,7 +44,6 @@ const DropMember = () => {
       // 🔹 로그인 페이지로 이동
       router.push("/signin");
 
-
     } catch (error: any) {
       console.error("🚨 회원 탈퇴 요청 실패:", error.response?.data || error.message);
       alert(error.response?.data?.error || "회원 탈퇴 요청 실패");
@@ -54,13 +53,22 @@ const DropMember = () => {
   };
 
   return (
-    <div className="flex justify-center mt-6">
+    <div className="flex justify-center mt-6 space-x-4"> {/* ✅ 버튼 간격 추가 */}
+      {/* ✅ 회원 탈퇴 버튼 */}
       <button 
         onClick={handleDropMember}
         className="px-6 py-3 bg-red-600 text-black font-medium rounded-lg hover:bg-red-700 transition-all duration-200"
         disabled={loading}
       >
         {loading ? "탈퇴 진행 중..." : "회원 탈퇴"}
+      </button>
+
+      {/* ✅ 개인정보 수정 버튼 */}
+      <button
+        onClick={() => router.push("/mypage/edit-information")}
+        className="px-6 py-3 bg-blue-500 text-black font-medium rounded-lg hover:bg-blue-600 transition-all duration-200"
+      >
+        ✏️ 개인정보 수정
       </button>
     </div>
   );
