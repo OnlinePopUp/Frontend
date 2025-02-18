@@ -1,8 +1,10 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useSearchParams } from "next/navigation";
-import ChatBox from "./ChatBox"; // ✅ ChatBox 컴포넌트 import
+// import ChatBox from "./ChatBox"; // ✅ ChatBox 컴포넌트 import
+import { Client } from "@stomp/stompjs";
+import SockJS from "sockjs-client";
 
 const FollowBox = () => {
   const searchParams = useSearchParams();
@@ -17,10 +19,14 @@ const FollowBox = () => {
   const [isFollowing, setIsFollowing] = useState(false);
   const [followerList, setFollowerList] = useState<string[]>([]); // ✅ 팔로워 리스트 저장
 
-  const [isChatOpen, setIsChatOpen] = useState(false); // ✅ 채팅 팝업 상태 추가
 
   const [isReportPopupOpen, setIsReportPopupOpen] = useState(false); // ✅ 신고 팝업 상태
   const [reportContent, setReportContent] = useState(""); // ✅ 신고 내용
+
+  const [isChatOpen, setIsChatOpen] = useState(false); // ✅ 채팅 팝업 상태 추가
+  const [messages, setMessages] = useState<any[]>([]);
+  const [message, setMessage] = useState(""); // 메시지 입력값
+  const stompClient = useRef<Client | null>(null);
 
   useEffect(() => {
     const fetchFollowData = async () => {
@@ -151,16 +157,6 @@ const FollowBox = () => {
     }
   };
 
-
-  // ✅ 메시지 전송 버튼 클릭 시 채팅 팝업 열기
-  const handleOpenChat = () => {
-    if (!userEmail) {
-      alert("로그인이 필요합니다.");
-      return;
-    }
-    setIsChatOpen(true);
-  };
-
   // ✅ 신고 제출 함수
   const handleReportSubmit = async () => {
     if (!accessToken) {
@@ -197,6 +193,66 @@ const FollowBox = () => {
       alert(error.response?.data?.error || "신고 요청 실패");
     }
   };
+
+  // ✅ WebSocket 연결 (부모에서 유지)
+    useEffect(() => {
+      if (!userEmail || !urlEmail) return;
+  
+      const socket = new SockJS("http://13.213.242.176:8081/chat/ws");
+      stompClient.current = new Client({
+        webSocketFactory: () => socket,
+        reconnectDelay: 5000,
+        onConnect: () => {
+          console.log("✅ WebSocket 연결 성공!");
+          stompClient.current?.subscribe(`/chat/sub/${userEmail}`, (response) => {
+            const chatMessage = JSON.parse(response.body);
+            setMessages((prevMessages) => [...prevMessages, chatMessage]);
+          });
+        },
+      });
+  
+      stompClient.current.activate();
+  
+      return () => {
+        stompClient.current?.deactivate();
+      };
+    }, [userEmail, urlEmail]);
+
+    // ✅ 채팅 기록 불러오기 (팝업 열 때 실행)
+    const fetchChatHistory = async () => {
+      if (!userEmail || !urlEmail) return;
+      try {
+        console.log("📥 채팅 기록 불러오기...");
+        const response = await axios.get(
+          `http://47.130.76.132:8080/chat/history?sEmail=${userEmail}&rEmail=${urlEmail}`
+        );
+        setMessages(response.data);
+        console.log("📜 채팅 기록:", response.data);
+      } catch (error) {
+        console.error("🚨 채팅 기록을 불러오는 중 오류 발생:", error);
+      }
+    };
+  
+    // ✅ 채팅 열기 (채팅 기록 먼저 불러오고 팝업을 띄우도록 변경)
+    const handleOpenChat = async () => {
+      if (!userEmail) {
+        alert("로그인이 필요합니다.");
+        return;
+      }
+      await fetchChatHistory(); // ✅ 채팅 기록 먼저 불러오기
+      setIsChatOpen(true);
+    };
+  
+    // ✅ 메시지 전송
+    const sendMessage = () => {
+      if (stompClient.current && message.trim() && urlEmail) {
+        const chatMessage = { sEmail: userEmail, rEmail: urlEmail, content: message };
+        stompClient.current.publish({ destination: "/chat/pub/send", body: JSON.stringify(chatMessage) });
+        setMessages((prevMessages) => [...prevMessages, chatMessage]); // 바로 UI 반영
+        setMessage(""); // 입력 초기화
+      }
+    };
+    
 
   return (
     <div className="p-4 bg-white shadow-md rounded-lg text-center">
@@ -261,8 +317,57 @@ const FollowBox = () => {
         </>
       )}
 
+       {/* ✅ ChatBox 팝업
+       {isChatOpen && <ChatBox recipientEmail={urlEmail} closeChat={() => setIsChatOpen(false)} />} */}
+
        {/* ✅ ChatBox 팝업 */}
-       {isChatOpen && <ChatBox recipientEmail={urlEmail} closeChat={() => setIsChatOpen(false)} />}
+      {isChatOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full relative">
+            <h2 className="text-xl font-semibold text-gray-800 mb-4">💬 {urlEmail}님과의 채팅</h2>
+
+            {/* ✅ 메시지 목록 */}
+            <div className="max-h-64 overflow-y-auto p-2 border rounded-lg bg-gray-100 mb-4">
+              {messages.map((msg, index) => (
+                <div
+                  key={index}
+                  className={`p-2 my-1 rounded-lg ${
+                    msg.sEmail === userEmail ? "bg-blue-200 text-right" : "bg-gray-200 text-left"
+                  }`}
+                >
+                  <p className="text-sm">{msg.content}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* ✅ 입력창 */}
+            <div className="flex gap-2">
+              <input
+                type="text"
+                className="flex-1 p-2 border rounded-lg"
+                placeholder="메시지를 입력하세요..."
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+              />
+              <button
+                onClick={sendMessage}
+                className="px-4 py-2 bg-green-500 text-black rounded-lg hover:bg-yellow-light-2 transition-all"
+              >
+                🚀 전송
+              </button>
+            </div>
+
+            {/* ✅ 닫기 버튼 */}
+            <button
+              onClick={() => setIsChatOpen(false)}
+              className="absolute top-3 right-3 text-gray-700 hover:text-red-500 text-xl"
+            >
+              ✖
+            </button>
+          </div>
+        </div>
+      )}
+
 
         {/* ✅ 신고 팝업 */}
         {isReportPopupOpen && (
