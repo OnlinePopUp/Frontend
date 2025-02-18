@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useSearchParams } from "next/navigation";
+import ChatBox from "./ChatBox"; // ✅ ChatBox 컴포넌트 import
 
 const FollowBox = () => {
   const searchParams = useSearchParams();
@@ -15,6 +16,11 @@ const FollowBox = () => {
   const [loading, setLoading] = useState(true);
   const [isFollowing, setIsFollowing] = useState(false);
   const [followerList, setFollowerList] = useState<string[]>([]); // ✅ 팔로워 리스트 저장
+
+  const [isChatOpen, setIsChatOpen] = useState(false); // ✅ 채팅 팝업 상태 추가
+
+  const [isReportPopupOpen, setIsReportPopupOpen] = useState(false); // ✅ 신고 팝업 상태
+  const [reportContent, setReportContent] = useState(""); // ✅ 신고 내용
 
   useEffect(() => {
     const fetchFollowData = async () => {
@@ -145,6 +151,53 @@ const FollowBox = () => {
     }
   };
 
+
+  // ✅ 메시지 전송 버튼 클릭 시 채팅 팝업 열기
+  const handleOpenChat = () => {
+    if (!userEmail) {
+      alert("로그인이 필요합니다.");
+      return;
+    }
+    setIsChatOpen(true);
+  };
+
+  // ✅ 신고 제출 함수
+  const handleReportSubmit = async () => {
+    if (!accessToken) {
+      alert("로그인이 필요합니다.");
+      return;
+    }
+    if (!reportContent.trim()) {
+      alert("신고 내용을 입력하세요.");
+      return;
+    }
+
+    try {
+      console.log(`🔹 서버에 POST 요청: /user/report`);
+      
+      // 🔹 FormData 생성
+      const formData = new FormData();
+      formData.append("email", urlEmail as string);
+      formData.append("content", reportContent);
+
+      // 🔹 서버 요청
+      const response = await axios.post("http://47.130.76.132:8080/user/report", formData, {
+        headers: {
+          Authorization: accessToken,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (response.status === 200) {
+        alert("신고가 접수되었습니다.");
+        setIsReportPopupOpen(false); // ✅ 팝업 닫기
+        setReportContent(""); // ✅ 입력 초기화
+      }
+    } catch (error: any) {
+      alert(error.response?.data?.error || "신고 요청 실패");
+    }
+  };
+
   return (
     <div className="p-4 bg-white shadow-md rounded-lg text-center">
       <h3 className="text-xl font-bold text-gray-800 mb-2">{urlEmail}님의 활동 정보</h3>
@@ -184,10 +237,66 @@ const FollowBox = () => {
               disabled={loading}
             >
               팔로우
-            </button>
+            </button> 
           )}
+
+          {/* ✅ 추가된 버튼들 */}
+          <div className="flex justify-center gap-2 mt-4">
+            {/* ✅ 신고 버튼 */}
+            <button
+              onClick={() => setIsReportPopupOpen(true)}
+              className="px-4 py-2 text-sm text-black bg-yellow-500 rounded-lg hover:bg-blue transition-all"
+            >
+              🚨 신고
+            </button>
+
+            <button
+              onClick={handleOpenChat}
+              className="px-4 py-2 text-sm text-black bg-green-500 rounded-lg hover:bg-green-600 transition-all"
+            >
+              💬 메시지 전송
+            </button>
+          </div>
+
         </>
       )}
+
+       {/* ✅ ChatBox 팝업 */}
+       {isChatOpen && <ChatBox recipientEmail={urlEmail} closeChat={() => setIsChatOpen(false)} />}
+
+        {/* ✅ 신고 팝업 */}
+        {isReportPopupOpen && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+            <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full relative">
+              <h2 className="text-xl font-semibold text-gray-800 mb-4">🚨 신고하기</h2>
+              
+              <textarea
+                value={reportContent}
+                onChange={(e) => setReportContent(e.target.value)}
+                placeholder="신고 내용을 입력하세요..."
+                className="w-full p-3 border border-gray-300 rounded-lg"
+                rows={4}
+              />
+
+              <div className="flex justify-between mt-4">
+                <button
+                  onClick={handleReportSubmit}
+                  className="px-6 py-3 bg-red-500 text-black rounded-lg hover:bg-red-600 transition-all"
+                >
+                  🚨 신고 제출
+                </button>
+
+                <button
+                  onClick={() => setIsReportPopupOpen(false)}
+                  className="px-6 py-3 bg-gray-400 text-black rounded-lg hover:bg-gray-500 transition-all"
+                >
+                  ❌ 닫기
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+  
     </div>
   );
 };
