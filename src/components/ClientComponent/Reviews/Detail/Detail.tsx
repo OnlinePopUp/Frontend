@@ -42,120 +42,92 @@ const Detail = () => {
     fetchPostDetail();
   }, [boardId]);
 
-  // ✅ 게시물 좋아요 요청
-  const handleLike = async () => {
+
+  const handleLikeToggle = async () => {
     const accessToken = localStorage.getItem("accessToken");
     if (!accessToken) {
       alert("로그인이 필요합니다!");
       return;
     }
-
+  
     try {
       console.log(`🔹 서버에 POST 요청: /post/like/${boardId}`);
       await axios.post(`http://47.130.76.132:8080/post/like/${boardId}`, {}, {
         headers: { Authorization: `${accessToken}` },
       });
-
+  
+      // ✅ 좋아요 요청 성공 → 좋아요 ON
       setLiked(true);
-      
-      alert("게시글을 좋아요 했습니다! ❤️");
-
-      // ✅ 좋아요 수 증가
       setPost((prevPost: any) => ({
         ...prevPost,
         board: { ...prevPost.board, heart: prevPost.board.heart + 1 },
       }));
     } catch (error: any) {
-      alert("이미 좋아요 누른 게시물입니다.");
+      console.warn("🚨 좋아요 실패 → 이미 좋아요 누른 상태, 취소 요청 진행");
+  
+      try {
+        console.log(`🔹 서버에 POST 요청: /post/delete/like/${boardId}`);
+        await axios.post(`http://47.130.76.132:8080/post/delete/like/${boardId}`, {}, {
+          headers: { Authorization: `${accessToken}` },
+        });
+  
+        // ✅ 좋아요 취소 요청 성공 → 좋아요 OFF
+        setLiked(false);
+        setPost((prevPost: any) => ({
+          ...prevPost,
+          board: { ...prevPost.board, heart: Math.max(prevPost.board.heart - 1, 0) },
+        }));
+      } catch (unlikeError: any) {
+        console.error("🚨 좋아요 취소 실패:", unlikeError.response?.data || unlikeError.message);
+        alert("오류가 발생했습니다. 다시 시도해주세요.");
+      }
     }
   };
+  
+  // ✅ 댓글 좋아요/좋아요 취소 토글 함수
+const handleLikeCommentToggle = async (cmtId: number, liked: boolean) => {
+  const accessToken = localStorage.getItem("accessToken");
+  if (!accessToken) {
+    alert("로그인이 필요합니다!");
+    return;
+  }
 
-  // ✅ 게시물 좋아요 취소 요청
-  const handleUnlike = async () => {
-    const accessToken = localStorage.getItem("accessToken");
-    if (!accessToken) {
-      alert("로그인이 필요합니다!");
-      return;
-    }
+  try {
+    console.log(`🔹 서버에 POST 요청: /comment/like/${cmtId}`);
+    await axios.post(`http://47.130.76.132:8080/comment/like/${cmtId}`, {}, {
+      headers: { Authorization: `${accessToken}` },
+    });
 
-    try {
-      console.log(`🔹 서버에 POST 요청: /post/delete/like/${boardId}`);
-      await axios.post(`http://47.130.76.132:8080/post/delete/like/${boardId}`, {}, {
-        headers: { Authorization: `${accessToken}` },
-      });
+    // ✅ 좋아요 요청 성공 → 좋아요 ON
+    setPost((prevPost: any) => {
+      const updatedComments = prevPost.comment.map((c: any) =>
+        c.cmtId === cmtId ? { ...c, heart: c.heart + 1, liked: true } : c
+      );
+      return { ...prevPost, comment: updatedComments };
+    });
+  } catch (error: any) {
+    console.warn("🚨 좋아요 실패 → 이미 좋아요 누른 상태, 취소 요청 진행");
 
-      setLiked(false);
-      alert("게시글 좋아요를 취소했습니다. 💔");
-
-      // ✅ 좋아요 수 감소
-      setPost((prevPost: any) => ({
-        ...prevPost,
-        board: { ...prevPost.board, heart: Math.max(prevPost.board.heart - 1, 0) },
-      }));
-      
-    } catch (error: any) {
-      alert("좋아요 하지 않은 게시물입니다.");
-    }
-  };
-
-  // ✅ 댓글 좋아요 요청
-  const handleLikeComment = async (cmtId: number) => {
-    const accessToken = localStorage.getItem("accessToken");
-    if (!accessToken) {
-      alert("로그인이 필요합니다!");
-      return;
-    }
-
-    try {
-      console.log(`🔹 서버에 POST 요청: /comment/like/${cmtId}`);
-      await axios.post(`http://47.130.76.132:8080/comment/like/${cmtId}`, {}, {
-        headers: { Authorization: `${accessToken}` },
-      });
-
-      // ✅ 좋아요 카운트 증가
-      setPost((prevPost: any) => {
-        const updatedComments = prevPost.comment.map((c: any) =>
-          c.cmtId === cmtId ? { ...c, heart: c.heart + 1 } : c
-        );
-        return { ...prevPost, comment: updatedComments };
-      });
-
-      alert("댓글을 좋아요 했습니다! ❤️");
-    } catch (error: any) {
-      alert("이미 좋아요 누른 댓글입니다.");
-    }
-  };
-
-  // ✅ 댓글 좋아요 취소 요청
-  const handleUnlikeComment = async (cmtId: number) => {
-    const accessToken = localStorage.getItem("accessToken");
-    if (!accessToken) {
-      alert("로그인이 필요합니다!");
-      return;
-    }
-
-    
-    console.log(`🔹 서버에 POST 요청: /comment/delete/like/${cmtId}`);
-    console.log(accessToken);
     try {
       console.log(`🔹 서버에 POST 요청: /comment/delete/like/${cmtId}`);
       await axios.post(`http://47.130.76.132:8080/comment/delete/like/${cmtId}`, {}, {
         headers: { Authorization: `${accessToken}` },
       });
 
-      // ✅ 좋아요 카운트 감소
+      // ✅ 좋아요 취소 요청 성공 → 좋아요 OFF
       setPost((prevPost: any) => {
         const updatedComments = prevPost.comment.map((c: any) =>
-          c.cmtId === cmtId ? { ...c, heart: Math.max(0, c.heart - 1) } : c
+          c.cmtId === cmtId ? { ...c, heart: Math.max(0, c.heart - 1), liked: false } : c
         );
         return { ...prevPost, comment: updatedComments };
       });
-
-      alert("댓글 좋아요를 취소했습니다. 💔");
-    } catch (error: any) {
-      alert("좋아요 하지 않은 댓글입니다.");
+    } catch (unlikeError: any) {
+      console.error("🚨 댓글 좋아요 취소 실패:", unlikeError.response?.data || unlikeError.message);
+      alert("오류가 발생했습니다. 다시 시도해주세요.");
     }
-  };
+  }
+};
+
 
   // ✅ 댓글 삭제 요청 함수
   const handleDeleteComment = async (cmtId: number) => {
@@ -212,16 +184,14 @@ const Detail = () => {
 
           {/* ✅ 좋아요 & 좋아요 취소 버튼 */}
           <div className="flex gap-4 mt-4">
+          {/* ✅ 좋아요 & 좋아요 취소 버튼 (통합) */}
           <button
-            onClick={handleLike}
+            onClick={handleLikeToggle}
             className="px-4 py-2 bg-blue-500 text-black rounded-lg hover:bg-blue-light-2 transition-all"
           >
-            ❤️ 좋아요 ({post.board.heart})
+            {liked ? "💔 좋아요 취소" : "❤️ 좋아요"} ({post.board.heart})
           </button>
 
-            <button onClick={handleUnlike} className="px-4 py-2 bg-red-500 text-black rounded-lg hover:bg-blue-light-2 transition-all">
-              💔 unlikes
-            </button>
           </div>
 
           {/* ✅ 댓글 작성 버튼 */}
@@ -256,22 +226,15 @@ const Detail = () => {
                         <button 
                           onClick={(e) => {
                             e.stopPropagation(); // ✅ 부모 클릭 이벤트 방지 (마이페이지 이동 방지)
-                            handleLikeComment(comment.cmtId);
+                            handleLikeCommentToggle(comment.cmtId, comment.liked);
                           }} 
-                          className="px-3 py-2 bg-blue-500 text-black text-sm rounded-lg hover:bg-blue-light-2 transition-all"
+                          className={`px-3 py-2 text-black text-sm rounded-lg transition-all ${
+                            comment.liked ? "bg-red-500 hover:bg-red-600" : "bg-blue-500 hover:bg-blue-600"
+                          }`}
                         >
-                          ❤️ 좋아요 ({comment.heart})
+                          {comment.liked ? "💔 좋아요 취소" : "❤️ 좋아요"} ({comment.heart})
                         </button>
 
-                        <button 
-                          onClick={(e) => {
-                            e.stopPropagation(); // ✅ 부모 클릭 이벤트 방지 (마이페이지 이동 방지)
-                            handleUnlikeComment(comment.cmtId);
-                          }} 
-                          className="px-3 py-2 bg-red-500 text-black text-sm rounded-lg"
-                        >
-                          💔 좋아요 취소
-                        </button>
 
                         {/* ✅ 현재 로그인한 유저와 댓글 작성자가 일치할 때만 수정 버튼 보이기 */}
                         {/* ✅ 현재 로그인한 유저와 댓글 작성자가 일치할 때만 수정 & 삭제 버튼 보이기 */}
