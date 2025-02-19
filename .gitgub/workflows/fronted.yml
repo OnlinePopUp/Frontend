@@ -1,0 +1,97 @@
+name: react CI/CD
+
+# 트리거: Push, Pull Reqeust 이벤트 발생시 작동, 브런치는 main
+# 만약 프론트, 백엔드 통합이면 특정 디렉토리가 업데이트 될 때 반영해라 등 세부 조건 추가 가능
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+# 해야 할 일들
+jobs:
+  react-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # 체크아웃 -> github의 저장소로부터 소스를 체크아웃
+      - name: Checkout repository resource
+        uses: actions/checkout@v2
+
+      # 환경변수 동적 생성 -> .env 파일 생성 (ec2 정보 세팅), 기존 코드 수정(보안)
+      - name: .env 환경 변수 동적 생성
+        run: |
+          echo "${{ secrets.CLIENT_ENV }}" > .env
+          pwd
+          ls -al 
+
+      # 빌드를 위한 조건 -> nodejs 설치
+      # uses: actions/setup-node@v2
+      - name: nodejs 설치
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'
+
+      # npm install 라이브러리 설치 -> node_modules 생성
+      # run: npm install
+      - name: install 독립 라이브러리
+        run: npm install
+
+      # 단위 테스트 -> 생략
+      #- name: 단위 테스트
+      #  run: npm test
+
+      # 빌드
+      # run: npm run build
+      - name: 빌드
+        run: |
+          chmod -R +x ./node_modules/.bin  # npm 실행 파일 디렉토리에 권한 부여
+          npm run build                   # 빌드 실행
+          chmod -R +r ./build             # 빌드 결과에 읽기 권한 부여
+          ls ./build                      # 빌드 디렉토리 내용 확인
+      
+
+      # 빌드의 결과물을 ec2 업로드
+      # 대상 : ./build/*
+      # 타겟 : /home/ubuntu/client
+      # 대상 위치에 존재하는 모든 리소스 -> ec2의 ~/client 하위에 복사
+      - name: EC2에 빌드된 파일/폴더들 업로드
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_KEY }}
+          source: ./build/*
+          target: /home/ubuntu/client
+
+      # /var/www/html/* <- 기존에 서비스 하던 내용을 모두 삭제(rm) 처리
+      # 뒷정리 (업로드 결과 -> nginx의 root로 이동(설정), 디렉토리 정리
+      - name: SSH로 EC2에 접속후, html등 내용 교체 후 웹서버 재가동
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_KEY }}
+          script_stop: true
+          script: |
+            sudo rm -rf /var/www/html/*
+            sudo mv /home/ubuntu/client/build/* /var/www/html
+            sudo systemctl restart nginx
+            sudo rm -rf /home/ubuntu/client
+            
+     
+      
+
+
+       
+
+
+
+
+
+
+
+
+
+
