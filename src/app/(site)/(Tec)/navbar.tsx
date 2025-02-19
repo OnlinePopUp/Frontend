@@ -47,7 +47,7 @@ export default function Navbar() {
             <div className="navbar-cart">
                 <Link href="/cart"><FontAwesomeIcon icon={faCartShopping} width="30"/></Link>
             </div>
-            
+
             {/* ✅ "후기 게시판" 버튼 추가 */}
             <div className="navbar-reviews">
                 <Link href="/reviews" className="review-button">

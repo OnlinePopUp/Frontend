@@ -227,12 +227,12 @@ a {
 .navbar-reviews {
   position: absolute;
   top: 50%;
-  right: 5%;
+  right: 1%;
   transform: translate(0%, -50%);
 }
 
 .review-button {
-  padding: 8px 16px;
+  padding: 8px 6px;
   background-color: #007bff;
   color: white;
   border-radius: 6px;

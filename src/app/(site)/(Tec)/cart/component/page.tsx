@@ -145,7 +145,7 @@ const Cart = () => {
             {/* 총 금액 및 주문하기 버튼 */}
             <div className="flex justify-between items-center mt-6">
                 <p className="text-xl font-bold">총 금액: {totalPrice.toLocaleString()} 원</p>
-                <button className="bg-blue-500 text-black px-6 py-3 rounded hover:bg-blue-600">
+                <button className="bg-blue-500 text-black px-6 py-3 rounded hover:bg-gray">
                     주문하기
                 </button>
             </div>
