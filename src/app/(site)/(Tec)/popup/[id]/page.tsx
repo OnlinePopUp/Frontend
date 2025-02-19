@@ -4,8 +4,8 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartPlus } from "@fortawesome/free-solid-svg-icons";
-import ucl from "/public/ucl.jpg";
-import ball from "/public/adidasBall.jpg";
+// import ucl from "/public/ucl.jpg";
+// import ball from "/public/adidasBall.jpg";
 import "./page.css";
 
 export default function PopupPage(props: any) {
@@ -27,7 +27,7 @@ export default function PopupPage(props: any) {
 
     return (
         <div className="eachPopupPage">
-            <Image className="popupMainPic" style={{opacity: opacity}} src={ucl} alt="popupMainPic"/>
+            <Image className="popupMainPic" style={{opacity: opacity}} src="/ucl.jpg" alt="popupMainPic"/>
             <div className="mt-10">
                 <pre className="ml-5 text-6xl">해외축구 굿즈 샵!</pre><pre className="ml-5 text-4xl text-gray-400 text-right">위송빠레</pre>
                 <p className="mt-5 ml-5 text-4xl">매장은 비싸고, 직구하기엔 배보다 배꼽이 더 커져 부담스럽던 굿즈!</p>
@@ -38,7 +38,7 @@ export default function PopupPage(props: any) {
                     {[...Array(6)].map((_, index) => (
                         <div key={index} className="relative w-20% border-indigo-500 ml-1 mr-1 mb-7 group">
                             <div className="relative overflow-hidden">
-                                <Image className="rounded-xl transition-opacity duration-300 group-hover:opacity-50" src={ball} alt="24/25 UCL knockout ball." />
+                            <Image className="rounded-xl transition-opacity duration-300 group-hover:opacity-50"   src="/ucl.jpg"   alt="24/25 UCL knockout ball."   width={500}   height={500} />
                                 <button className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-blue-700 text-white px-4 py-2 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                 <FontAwesomeIcon icon={faCartPlus} size="xl"/>
                                 </button>

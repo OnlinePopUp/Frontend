@@ -8,7 +8,7 @@ import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import "./popup.css";
-import ucl from "/public/ucl.jpg";
+// import ucl from "/public/ucl.jpg";
 
 export default function Popuplist() {
     const [data, setData] = useState([]);
@@ -75,7 +75,7 @@ export default function Popuplist() {
                             >
                                 <div className="relative overflow-hidden min-h-[403px] w-20%">
                                     <div className="popupItem">
-                                        <Image className="cardImage" src={ucl} alt={post.userId} />
+                                        <Image className="cardImage" src="/ucl.jpg"  alt={post.userId} />
                                         <p className="mt-3 ml-3 text-4xl truncate">{post.title}</p>
                                         <h2 className="mt-1 ml-3 text-lg truncate">{post.title}</h2>
                                         <h4 className="mt-1 ml-3 text-2xl line-clamp-2">{post.body}</h4>
