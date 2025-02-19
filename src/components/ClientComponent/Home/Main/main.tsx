@@ -1,4 +1,8 @@
 import React from "react";
+import axios from "@/utils/axiosConfig";
+axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_URL;
+
+console.log("Axios Base URL:", axios.defaults.baseURL);
 
 const popupStores = [
   {
@@ -31,6 +35,7 @@ const popupStores = [
 ];
 
 const Main: React.FC = () => {
+  console.log("Axios Base URL:", axios.defaults.baseURL);
   return (
     <div className="bg-meta text-dark min-h-screen relative">
       {popupStores.map((store) => (

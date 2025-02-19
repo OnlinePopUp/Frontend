@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "@/utils/axiosConfig";
 import { useSearchParams, useRouter } from "next/navigation"; // ✅ URL 파라미터 가져오기 + 페이지 이동
 
 const UpdateReviews = () => {

@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import axios from "axios";
+import axios from "@/utils/axiosConfig";
 import { useRouter } from "next/navigation"; // ✅ 페이지 이동을 위한 Next.js Router
 
 const DropMember = () => {
@@ -28,7 +28,7 @@ const DropMember = () => {
       formData.append("email", userEmail); // ✅ 바디에 email 포함
 
       // 🔹 서버에 회원 탈퇴 요청
-      const response = await axios.post("http://47.130.76.132:8080/user/delete", formData, {
+      const response = await axios.post("/user/delete", formData, {
         headers: {
           Authorization: `${accessToken}`, // ✅ 엑세스 토큰 추가
         },

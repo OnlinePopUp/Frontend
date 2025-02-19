@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import axios from "axios";
+import axios from "@/utils/axiosConfig";
 
 const FillPoint = () => {
   const [isVisible, setIsVisible] = useState(false); // ✅ UI 표시 여부 상태
@@ -32,7 +32,7 @@ const FillPoint = () => {
       formData.append("point", point); // ✅ 포인트 값 추가
 
       // 🔹 서버에 포인트 충전 요청 (`POST /user/fill/point`)
-      const response = await axios.post("http://47.130.76.132:8080/user/fill/point", formData, {
+      const response = await axios.post("/user/fill/point", formData, {
         headers: {
           Authorization: `${accessToken}`, // ✅ 헤더에 토큰 포함
         },

@@ -3,11 +3,12 @@
 // import Breadcrumb from "@/components/ClientComponent/Common/Breadcrumb";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { useRouter } from "next/navigation";
+import axios from "@/utils/axiosConfig";  // ✅ 글로벌 설정된 axios 사용
 
 const Signin = () => {
 
+  console.log("🚀 Global Axios Base URL:", axios.defaults.baseURL);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -23,41 +24,6 @@ const Signin = () => {
     });
   };
 
-  //토큰 없이
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-
-  //   const formDataToSend = new FormData();
-  //   formDataToSend.append("email", formData.email);
-  //   formDataToSend.append("password", formData.password);
-
-  //   try {
-  //     const response = await axios.post(
-  //       "http://47.130.76.132:8080/auth/login",
-  //       formDataToSend,
-  //       {
-  //         headers: {
-  //           "Content-Type": "multipart/form-data",
-  //         },
-  //       }
-  //     );
-
-  //     console.log("Login successful:", response.data);
-  //     alert("Login successful!");
-
-  //     setFormData({
-  //       email: "",
-  //       password: "",
-  //     });
-
-  //     router.push("/");
-  //   } catch (error) {
-  //     console.error("Login failed:", error.response?.data || error.message);
-  //     alert("Login failed. Please try again.");
-  //   }
-
-  // };
-
   //토큰 있을때
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -70,7 +36,7 @@ const Signin = () => {
     try {
 
       const response = await axios.post(
-          "http://47.130.76.132:8080/auth/login",
+          "/auth/login",
           formDataToSend,
           {
             headers: {
@@ -117,17 +83,7 @@ const Signin = () => {
     }
   };
   
-  //토큰 들어왔는지 테스트
-  // useEffect(() => {
-  //   const token = localStorage.getItem('accessToken');
-  
-  //   if (token) {
-  //     console.log("Token exists in localStorage:", token);
-  //   } else {
-  //     console.log("No token found in localStorage.");
-  //   }
-  // }, []);
-  
+
   return (
     <>
       {/* <Breadcrumb title={"Signin"} pages={["Signin"]} /> */}

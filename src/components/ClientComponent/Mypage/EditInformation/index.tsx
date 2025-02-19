@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import axios from "axios";
+import axios from "@/utils/axiosConfig";
 import { useRouter } from "next/navigation";
 
 const EditInformation = () => {
@@ -36,7 +36,7 @@ const EditInformation = () => {
     try {
       console.log("🔹 서버에 POST 요청 (FormData): /user/update", formDataToSend);
       const response = await axios.post(
-        "http://47.130.76.132:8080/user/update",
+        "/user/update",
         formDataToSend,
         {
           headers: {

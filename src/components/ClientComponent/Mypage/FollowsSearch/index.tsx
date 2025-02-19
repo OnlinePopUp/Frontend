@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import axios from "axios";
+import axios from "@/utils/axiosConfig";
 
 const FollowSection = () => {
   const [email, setEmail] = useState(""); // 입력된 이메일
@@ -32,7 +32,7 @@ const FollowSection = () => {
       formDataToSend.append("flwEmail", email); // 🔹 팔로우할 이메일 추가
 
       const response = await axios.post(
-        "http://47.130.76.132:8080/user/follow",
+        "/user/follow",
         formDataToSend, //  FormData 전송
         {
           headers: {

@@ -52,7 +52,7 @@ const ItemCreate: React.FC = () => {
                 formData.append("files", file);
             });
 
-            const response = await fetch(`http://47.130.76.132:8080/item`, {
+            const response = await fetch(`/item`, {
                 method: "POST",
                 headers: {
                     "Authorization": `${token}`,

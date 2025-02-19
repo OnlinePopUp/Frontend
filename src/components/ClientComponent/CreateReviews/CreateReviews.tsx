@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import axios from "axios";
+import axios from "@/utils/axiosConfig";
 import {  useRouter } from "next/navigation"; // 페이지 이동
 
 const CreateReviews = () => {
@@ -47,7 +47,7 @@ const CreateReviews = () => {
       }
 
       // 🔹 서버에 POST 요청 (`/post/write`)
-      const response = await axios.post("http://47.130.76.132:8080/post/write", formData, {
+      const response = await axios.post("/post/write", formData, {
         headers: {
           Authorization: `${accessToken}` // ✅ 헤더에 토큰 포함
         },

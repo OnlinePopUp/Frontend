@@ -3,7 +3,7 @@
 // import Breadcrumb from "@/components/ClientComponent/Common/Breadcrumb";
 import Link from "next/link";
 import React, { useState } from "react";
-import axios from "axios";
+import axios from "@/utils/axiosConfig";
 import { useRouter } from "next/navigation";
 
 const Signup = () => {
@@ -46,7 +46,7 @@ const Signup = () => {
 
     try {
       const response = await axios.post(
-        "http://47.130.76.132:8080/auth/join",
+        "/auth/join",
         formDataToSend,
         {
           headers: {

@@ -3,6 +3,7 @@ import LogoutButton from "@/components/ClientComponent/Home/Logout/logout"; // �
 import Main from "@/components/ClientComponent/Home/Main/main"; // ✅ `Main` import 경로 확인
 
 
+
 const Home = () => {
   return (
     <div className="relative">

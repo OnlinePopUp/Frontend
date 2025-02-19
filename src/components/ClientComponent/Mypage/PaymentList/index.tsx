@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "@/utils/axiosConfig";
 
 const PaymentList = () => {
   const [payments, setPayments] = useState([]);
@@ -16,7 +16,7 @@ const PaymentList = () => {
       try {
         const token = localStorage.getItem("accessToken");
         const response = await axios.get(
-          "http://47.130.76.132:8080/order/payment",
+          "/order/payment",
           {
             headers: {
               Authorization: `${token}`,
@@ -39,7 +39,7 @@ const PaymentList = () => {
     try {
       const token = localStorage.getItem("accessToken");
       const response = await axios.get(
-        `http://47.130.76.132:8080/order/payment/${paymentId}`,
+        `/order/payment/${paymentId}`,
         {
           headers: {
             Authorization: `${token}`,

@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import axios from "axios";
+import axios from "@/utils/axiosConfig";
 
 interface CommentProps {
   boardId: string | null;
@@ -40,7 +40,7 @@ const Comment: React.FC<CommentProps> = ({ boardId, closePopup, initialContent =
           formData.append("content", comment);
 
           await axios.post(
-            `http://47.130.76.132:8080/comment/update/${cmtId}`,
+            `/comment/update/${cmtId}`,
             formData,
             {
               headers: {
@@ -68,7 +68,7 @@ const Comment: React.FC<CommentProps> = ({ boardId, closePopup, initialContent =
           formData.append("boardId", boardId || "");
 
           const response = await axios.post(
-            `http://47.130.76.132:8080/comment/write`,
+            `/comment/write`,
             formData,
             {
               headers: {

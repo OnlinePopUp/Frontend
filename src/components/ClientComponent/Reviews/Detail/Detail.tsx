@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "@/utils/axiosConfig";
 import { useSearchParams, useRouter } from "next/navigation";
 import Comment from "../Comment/Comment"; // ✅ Comment 컴포넌트 import
 
@@ -24,7 +24,7 @@ const Detail = () => {
 
       try {
         console.log(`🔹 서버에 GET 요청: /post/${boardId}`);
-        const response = await axios.get(`http://47.130.76.132:8080/post/${boardId}`);
+        const response = await axios.get(`/post/${boardId}`);
 
         console.log("🔹 게시글 상세 정보 응답 데이터:", response.data);
 
@@ -52,7 +52,7 @@ const Detail = () => {
   
     try {
       console.log(`🔹 서버에 POST 요청: /post/like/${boardId}`);
-      await axios.post(`http://47.130.76.132:8080/post/like/${boardId}`, {}, {
+      await axios.post(`/post/like/${boardId}`, {}, {
         headers: { Authorization: `${accessToken}` },
       });
   
@@ -67,7 +67,7 @@ const Detail = () => {
   
       try {
         console.log(`🔹 서버에 POST 요청: /post/delete/like/${boardId}`);
-        await axios.post(`http://47.130.76.132:8080/post/delete/like/${boardId}`, {}, {
+        await axios.post(`/post/delete/like/${boardId}`, {}, {
           headers: { Authorization: `${accessToken}` },
         });
   
@@ -94,7 +94,7 @@ const handleLikeCommentToggle = async (cmtId: number, liked: boolean) => {
 
   try {
     console.log(`🔹 서버에 POST 요청: /comment/like/${cmtId}`);
-    await axios.post(`http://47.130.76.132:8080/comment/like/${cmtId}`, {}, {
+    await axios.post(`/comment/like/${cmtId}`, {}, {
       headers: { Authorization: `${accessToken}` },
     });
 
@@ -110,7 +110,7 @@ const handleLikeCommentToggle = async (cmtId: number, liked: boolean) => {
 
     try {
       console.log(`🔹 서버에 POST 요청: /comment/delete/like/${cmtId}`);
-      await axios.post(`http://47.130.76.132:8080/comment/delete/like/${cmtId}`, {}, {
+      await axios.post(`/comment/delete/like/${cmtId}`, {}, {
         headers: { Authorization: `${accessToken}` },
       });
 
@@ -141,7 +141,7 @@ const handleLikeCommentToggle = async (cmtId: number, liked: boolean) => {
 
     try {
       console.log(`🔹 서버에 POST 요청: /comment/delete/${cmtId}`);
-      await axios.post(`http://47.130.76.132:8080/comment/delete/${cmtId}`, {}, {
+      await axios.post(`/comment/delete/${cmtId}`, {}, {
         headers: {
           Authorization: `${accessToken}`,
         },

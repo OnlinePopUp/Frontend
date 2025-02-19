@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "@/utils/axiosConfig";
 import { useRouter } from "next/navigation"; // ✅ Next.js Router 사용
 
 const LogoutButton = () => {
@@ -27,7 +27,7 @@ const LogoutButton = () => {
 
     try {
       // 🔹 서버에 로그아웃 요청 (쿠키에서 refreshToken 삭제)
-      await axios.post("http://47.130.76.132:8080/auth/logout", {}, {
+      await axios.post("/auth/logout", {}, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },

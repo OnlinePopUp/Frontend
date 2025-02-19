@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "@/utils/axiosConfig";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link"; // ✅ Next.js Link 사용
 
@@ -20,7 +20,7 @@ const PostWritten = () => {
       setLoading(true);
       try {
         console.log(`🔹 서버에 GET 요청: /post/all?size=999&page=0`);
-        const response = await axios.get(`http://47.130.76.132:8080/post/all?size=999&page=0`);
+        const response = await axios.get(`/post/all?size=999&page=0`);
 
         console.log("🔹 전체 게시글 응답 데이터:", response.data);
 

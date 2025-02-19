@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "@/utils/axiosConfig";
 import { useSearchParams } from "next/navigation";
 import Follow from "./Follow"; // ✅ Follow 컴포넌트 import
 import Follower from "./Follower"; // ✅ Follower 컴포넌트 import
@@ -39,10 +39,10 @@ const FollowsSectionList = () => {
 
       setLoading(true);
       try {
-        console.log(`🔹 서버에 GET 요청: http://47.130.76.132:8080/user/follow/all?email=${targetEmail}`);
+        console.log(`🔹 서버에 GET 요청: /user/follow/all?email=${targetEmail}`);
 
         const response = await axios.get(
-          `http://47.130.76.132:8080/user/follow/all?email=${targetEmail}`,
+          `/user/follow/all?email=${targetEmail}`,
           {
             headers: { Authorization: `${accessToken}` },
           }
@@ -86,7 +86,7 @@ const FollowsSectionList = () => {
       const formData = new FormData();
       formData.append("flwEmail", flwEmail);
 
-      await axios.post("http://47.130.76.132:8080/user/delete/follow", formData, {
+      await axios.post("/user/delete/follow", formData, {
         headers: {
           Authorization: `${accessToken}`,
           "Content-Type": "multipart/form-data",

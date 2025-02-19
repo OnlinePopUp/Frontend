@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
-import axios from "axios";
+import axios from "@/utils/axiosConfig";
 import { useSearchParams } from "next/navigation";
 // import ChatBox from "./ChatBox"; // ✅ ChatBox 컴포넌트 import
 import { Client } from "@stomp/stompjs";
@@ -37,7 +37,7 @@ const FollowBox = () => {
 
       try {
         console.log(`🔹 서버에 GET 요청: /user/follow/all?email=${urlEmail}`);
-        const response = await axios.get(`http://47.130.76.132:8080/user/follow/all?email=${urlEmail}`);
+        const response = await axios.get(`/user/follow/all?email=${urlEmail}`);
 
         console.log("🔹 FollowBox 팔로우 정보 응답 데이터:", response.data);
 
@@ -56,7 +56,7 @@ const FollowBox = () => {
     const fetchPostCount = async () => {
       try {
         console.log(`🔹 서버에 GET 요청: /post/all?size=999&page=0`);
-        const response = await axios.get(`http://47.130.76.132:8080/post/all?size=999&page=0`);
+        const response = await axios.get(`/post/all?size=999&page=0`);
 
         console.log("🔹 게시글 응답 데이터:", response.data);
 
@@ -98,7 +98,7 @@ const FollowBox = () => {
       formDataToSend.append("flwEmail", urlEmail as string);
 
       const response = await axios.post(
-        "http://47.130.76.132:8080/user/follow",
+        "/user/follow",
         formDataToSend,
         {
           headers: {
@@ -135,7 +135,7 @@ const FollowBox = () => {
       formDataToSend.append("flwEmail", urlEmail as string);
 
       const response = await axios.post(
-        "http://47.130.76.132:8080/user/delete/follow",
+        "/user/delete/follow",
         formDataToSend,
         {
           headers: {
@@ -177,7 +177,7 @@ const FollowBox = () => {
       formData.append("content", reportContent);
 
       // 🔹 서버 요청
-      const response = await axios.post("http://47.130.76.132:8080/user/report", formData, {
+      const response = await axios.post("/user/report", formData, {
         headers: {
           Authorization: accessToken,
           "Content-Type": "multipart/form-data",
@@ -224,7 +224,7 @@ const FollowBox = () => {
       try {
         console.log("📥 채팅 기록 불러오기...");
         const response = await axios.get(
-          `http://47.130.76.132:8080/chat/history?sEmail=${userEmail}&rEmail=${urlEmail}`
+          `/chat/history?sEmail=${userEmail}&rEmail=${urlEmail}`
         );
         setMessages(response.data);
         console.log("📜 채팅 기록:", response.data);
