@@ -1,0 +1,16 @@
+@font-face {
+    font-family: 'NanumHumanTTFBold';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2501-1@1.1/NanumHumanTTFBold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+}
+
+.wholeUserPage {
+  position: absolute;
+  top: 12vh;
+  height: 400;
+  width: 100%;
+  font-family: 'NanumHumanTTFBold';
+  font-size: x-large;
+  align-content: center;
+}

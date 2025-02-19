@@ -37,9 +37,9 @@ export default function Searchform() {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
-            <input type="text" name="keyword" className="searchSpace" onChange={searchResult} placeholder={randomSearchPlaceholder()}></input>
+            <input type="text" name="keyword" className="searchSpace" maxLength={15} onChange={searchResult} placeholder={randomSearchPlaceholder()}></input>
             <button type="submit" className="searchBtn">
-                <FontAwesomeIcon icon={faMagnifyingGlass} fontSize="100%"/>
+                <FontAwesomeIcon icon={faMagnifyingGlass} fontSize="70%"/>
             </button>
         </form>
     )

@@ -1,0 +1,120 @@
+@font-face {
+    font-family: 'NanumHumanTTFBold';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2501-1@1.1/NanumHumanTTFBold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+}
+@font-face {
+  font-family: 'SBAggroB';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SBAggroB.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.popupList {
+  position: relative;
+  margin-top: 3vh;
+  margin-left: 3%;
+  margin-right: 3%;
+  height: 100vh;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+.popupList::-webkit-scrollbar {
+  display: none;
+}
+
+.sortPopup {
+  position: relative;
+  margin-top: 1%;
+  height: 1vh;
+  left: 80%;
+  font-family: 'NanumHumanTTFBold';
+  font-size: x-large;
+}
+
+.sortTagClicked {
+  color: #000000;
+}
+.sortTagUnclicked {
+  color: #BBBBBB;
+}
+
+.sortPopup h4 {
+  display: inline;
+}
+
+.mouseOnCard {
+  border-width: 4px;
+  border-radius: 0.75rem;
+  border-color: #af3333;
+  transition: all 0.3s ease;
+}
+.mouseOnCard:hover{
+  transform: translateY(-5px);
+  box-shadow: 0 15px 15px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+.mouseOffCard {
+  border-width: 4px;
+  border-radius: 0.75rem;
+  border-color: #ddddff;
+  transition: all 0.3s ease;
+}
+
+.popUps {
+  position: relative;
+  height: 150vh;
+  margin-top: 4%;
+  margin-left: 0.5%;
+  margin-right: 0.5%;
+  overflow-y: scroll;
+}
+.popUps::-webkit-scrollbar {
+  display: none;
+}
+
+.singlePopup {
+  white-space: normal;
+}
+
+.popupItem {
+  position: relative;
+  font-family: 'SBAggroB';
+}
+
+.popupItem h4, h2 {
+  font-family: 'NanumHumanTTFBold';
+}
+
+.popupItem h2 {
+  color: #bbbbbb;
+}
+
+.cardImage {
+  width:100%;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.popupRegisterDiv {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.popupRegisterDiv h4 {
+  font-family: 'SBAggroB';
+  font-size: 300%;
+}
+
+.popupRegisterForm {
+  font-family: 'NanumHumanTTFBold';
+  font-size: x-large;
+}
+
+.popupRegisterForm input {
+  padding-top: 3%;
+  padding-bottom: 3%;
+}
