@@ -9,36 +9,28 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "__comment":"아이콘 사용",
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
 
-    "__comment1":"WebSocket 실시간 통신",
     "@stomp/stompjs": "^7.0.0",
     "sockjs-client": "^1.6.1",
 
-    "__comment2":"TypeScript 타입 지원",
     "@types/node": "20.6.2",
     "@types/react-dom": "18.2.7",
     "typescript": "5.2.2",
 
-    "__comment3":"CSS 스타일링",
     "autoprefixer": "10.4.15",
     "postcss": "8.4.29",
     "tailwindcss": "3.3.3",
 
-    "__comment4":"API 요청 (HTTP 통신)", 
     "axios": "^1.7.9",
 
-    "__comment5":"코드 품질 관리 (Linting)",
     "eslint": "8.49.0",
     "eslint-config-next": "13.4.19",
 
-    "__comment6":"Next.js 프레임워크",
     "next": "^15.1.7",
     
-    "__comment7":"React UI 개발",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.54.2",
