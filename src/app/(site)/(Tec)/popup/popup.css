@@ -13,16 +13,22 @@
 
 .popupList {
   position: relative;
-  justify-items: right;
+  margin-top: 3vh;
   margin-left: 3%;
   margin-right: 3%;
+  height: 100vh;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+.popupList::-webkit-scrollbar {
+  display: none;
 }
 
 .sortPopup {
   position: relative;
   margin-top: 1%;
-  height: 0;
-  right: 5%;
+  height: 1vh;
+  left: 80%;
   font-family: 'NanumHumanTTFBold';
   font-size: x-large;
 }
@@ -62,6 +68,10 @@
   margin-top: 4%;
   margin-left: 0.5%;
   margin-right: 0.5%;
+  overflow-y: scroll;
+}
+.popUps::-webkit-scrollbar {
+  display: none;
 }
 
 .singlePopup {
@@ -82,7 +92,29 @@
 }
 
 .cardImage {
-    height: 100%;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
+  width:100%;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.popupRegisterDiv {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.popupRegisterDiv h4 {
+  font-family: 'SBAggroB';
+  font-size: 300%;
+}
+
+.popupRegisterForm {
+  font-family: 'NanumHumanTTFBold';
+  font-size: x-large;
+}
+
+.popupRegisterForm input {
+  padding-top: 3%;
+  padding-bottom: 3%;
 }

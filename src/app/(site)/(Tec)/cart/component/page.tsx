@@ -15,7 +15,7 @@ const Cart = () => {
                     throw new Error("토큰을 찾을 수 없습니다.");
                 }
 
-                const response = await fetch("/cart", {
+                const response = await fetch("http://47.130.76.132:8080/cart", {
                     method: "GET",
                     headers: {
                         "Authorization": `${token}`,
@@ -49,7 +49,7 @@ const Cart = () => {
                 return;
             }
             // 수량이 0이 되면 삭제 메소드 호출 
-            const response = await fetch(`/cart/${cartId}`, {
+            const response = await fetch(`http://47.130.76.132:8080/cart/${cartId}`, {
                 method: "DELETE",
                 headers: {
                     "Authorization": `${token}`,

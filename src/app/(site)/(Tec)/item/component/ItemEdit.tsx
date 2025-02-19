@@ -28,7 +28,7 @@ const ItemEdit: React.FC<ItemEditProps> = ({ itemId }) => {
                     throw new Error("토큰을 찾을 수 없습니다.");
                 }
 
-                const response = await fetch(`/item/itemDetail/${itemId}`, {
+                const response = await fetch(`http://47.130.76.132:8080/item/itemDetail/${itemId}`, {
                     method: "GET",
                     headers: {
                         "Authorization": `${token}`,
@@ -102,7 +102,7 @@ const ItemEdit: React.FC<ItemEditProps> = ({ itemId }) => {
                 formData.append("files", file);
             });
 
-            const response = await fetch(`/item/${itemId}`, {
+            const response = await fetch(`http://47.130.76.132:8080/item/${itemId}`, {
                 method: "PUT",
                 headers: {
                     "Authorization": `${token}`,

@@ -7,13 +7,13 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     <html lang="en">
       <body>
         {/* <ServerLayout> */}
-        <RootLayout>
+        {/* <RootLayout> */}
             <TecLayout> 
               {/* <div style={{ minHeight: "1000vh" }}> 최소 높이 설정 */}
                {children}
               {/* </div> */}
             </TecLayout>
-        </RootLayout>
+        {/* </RootLayout> */}
         {/* </ServerLayout> */}
       </body>
     </html>

@@ -27,7 +27,7 @@ const ItemDetail: React.FC<ItemDetailProps> = ({ itemId }) => {
                     throw new Error("토큰을 찾을 수 없습니다.");
                 }
 
-                const response = await fetch(`/item/itemDetail/${itemId}`, {
+                const response = await fetch(`http://47.130.76.132:8080/item/itemDetail/${itemId}`, {
                     method: "GET",
                     headers: {
                         "Authorization": `${token}`,
@@ -79,7 +79,7 @@ const ItemDetail: React.FC<ItemDetailProps> = ({ itemId }) => {
         if (!confirmDelete) return;
 
         try {
-            const response = await fetch(`/item/${itemId}`, {
+            const response = await fetch(`http://47.130.76.132:8080/item/${itemId}`, {
                 method: "DELETE",
                 headers: {
                     "Authorization": `${token}`,
@@ -117,7 +117,7 @@ const ItemDetail: React.FC<ItemDetailProps> = ({ itemId }) => {
         if (!confirmAdd) return;
 
         try {
-            const response = await fetch(`/cart/${item.popId}/${item.itemId}`, {
+            const response = await fetch(`http://47.130.76.132:8080/cart/${item.popId}/${item.itemId}`, {
                 method: "POST",
                 headers: {
                     "Authorization": `${token}`,

@@ -28,19 +28,17 @@
 }
 
 html {
-  overflow-y: hidden;
+  overflow-y: scroll;
+  overflow-x: hidden;
   height: auto;
 }
 
 html,
 body {
-  
   overflow-y: auto !important; /* 🔥 강제로 스크롤 가능하게 설정 */
   height: auto !important; 
-
   height: 100%;
   max-width: 100vw;
-  overflow-x: hidden;
 }
 
 body {
@@ -182,11 +180,67 @@ a {
   color: #af3333;
 }
 
+.navbar-category {
+  position: relative;
+  padding: 10px 0;
+  width: 15%;
+}
 
-.Others {
-  height: 100%;
-  overflow: auto;
-  margin-top: 12vh;
+.navbar-category > a {
+  text-decoration: none;
+  color: #333;
+}
+
+.category-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 300%;
+  display: flex;
+  background-color: #f8f8f8;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  z-index: 1000;
+}
+
+.category-slide a {
+  margin: 0 15px;
+  text-decoration: none;
+  color: #333;
+}
+
+.category-slide a:hover {
+  color: #007bff;
 }
 
 
+.Others {
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  margin-top: 12vh;
+}
+
+.navbar-reviews {
+  position: absolute;
+  top: 50%;
+  right: 5%;
+  transform: translate(0%, -50%);
+}
+
+.review-button {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.review-button:hover {
+  background-color: #0056b3;
+}

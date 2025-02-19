@@ -104,6 +104,9 @@ const config: Config = {
       ...defaultTheme.screens,
     },
     extend: {
+      backgroundImage: {
+        'popup-bg': "url('/back.jpg')", // ✅ 배경 이미지 추가
+      },
       fontSize: {
         "2xs": ["10px", "17px"],
         "heading-1": ["60px", "72px"],

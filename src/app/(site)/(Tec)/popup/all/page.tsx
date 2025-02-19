@@ -3,11 +3,11 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
-import "./../popup/popup.css";
+import "./../popup.css";
 import ucl from "/public/ucl.jpg";
 
 interface Popup {
@@ -30,7 +30,6 @@ export default function Popuplist() {
     const [activeTag, setActiveTag] = useState("date");
     const [isMouseOn, setMouseOn] = useState({});
     const router = useRouter();
-    const params = useParams();
 
     const handleMouseEnter = (id: number) => setMouseOn({[id]: true});
     const handleMouseLeave = (id: number) => setMouseOn({[id]: false});

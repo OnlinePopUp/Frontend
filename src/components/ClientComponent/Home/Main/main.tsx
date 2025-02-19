@@ -1,8 +1,7 @@
 import React from "react";
+import Image from "next/image";
 import axios from "@/utils/axiosConfig";
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_URL;
-
-console.log("Axios Base URL:", axios.defaults.baseURL);
 
 const popupStores = [
   {
@@ -35,28 +34,29 @@ const popupStores = [
 ];
 
 const Main: React.FC = () => {
-  console.log("Axios Base URL:", axios.defaults.baseURL);
   return (
-    <div className="bg-meta text-dark min-h-screen relative">
+    <div className="bg-popup-bg bg-cover bg-center min-h-screen relative">
+
       {popupStores.map((store) => (
         <div key={store.id} className="container mx-auto py-16">
-          {/* 팝업스토어 정보 */}
           <div className="text-center">
             <h2 className="text-heading-2 font-semibold">{store.title}</h2>
             <p className="text-custom-lg mt-4">{store.description}</p>
           </div>
 
-          {/* 상품 리스트 */}
           <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
             {store.products.map((product) => (
               <div
                 key={product.id}
                 className="bg-white p-4 rounded-lg shadow-2 hover:shadow-3 transition"
               >
-                <img
+                <Image
                   src={product.image}
                   alt={product.name}
-                  className="h-40 w-full object-cover rounded-lg"
+                  width={250}
+                  height={250}
+                  className="object-contain rounded-lg"
+                  quality={90}
                 />
                 <h3 className="text-lg font-medium mt-4">{product.name}</h3>
                 <p className="text-custom-sm text-gray-6 mt-2">{product.price}</p>
@@ -66,7 +66,6 @@ const Main: React.FC = () => {
         </div>
       ))}
 
-      {/* 푸터 */}
       <footer className="bg-dark text-white py-6 text-center">
         <p>© 2025 Popup Store. All rights reserved.</p>
       </footer>
