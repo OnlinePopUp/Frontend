@@ -33,6 +33,9 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Install sharp for Linux
+        run: npm install --include=optional sharp    
+
       # npm install 라이브러리 설치 -> node_modules 생성
       # run: npm install
       - name: install 독립 라이브러리
