@@ -213,7 +213,7 @@ const handleLikeCommentToggle = async (cmtId: number, liked: boolean) => {
                   {post.comment.map((comment: any, index: number) => (
                     <li 
                       key={index} 
-                      className="p-3 bg-gray-DEFAULT rounded-lg flex justify-between items-center cursor-pointer hover:bg-gray-200 transition"
+                      className="p-3 bg-gray-DEFAULT rounded-lg flex justify-between items-center cursor-pointer hover:underline transition"
                       onClick={() => router.push(`/mypage?email=${comment.email}`)} // ✅ 댓글 클릭 시 마이페이지 이동
                     >
                       <div>
@@ -229,7 +229,7 @@ const handleLikeCommentToggle = async (cmtId: number, liked: boolean) => {
                             handleLikeCommentToggle(comment.cmtId, comment.liked);
                           }} 
                           className={`px-3 py-2 text-black text-sm rounded-lg transition-all ${
-                            comment.liked ? "bg-red-500 hover:bg-red-600" : "bg-blue-500 hover:bg-blue-600"
+                            comment.liked ? "bg-red-500 hover:bg-red-600" : "bg-blue-500 hover:bg-blue-light-4"
                           }`}
                         >
                           {comment.liked ? "💔 좋아요 취소" : "❤️ 좋아요"} ({comment.heart})
@@ -259,7 +259,7 @@ const handleLikeCommentToggle = async (cmtId: number, liked: boolean) => {
                                 e.stopPropagation(); // ✅ 부모 클릭 이벤트 방지 (마이페이지 이동 방지)
                                 handleDeleteComment(comment.cmtId); // ✅ 삭제 함수 호출
                               }}
-                              className="px-3 py-2 bg-red-500 text-black text-sm rounded-lg hover:bg-red-700 transition-all"
+                              className="px-3 py-2 bg-red-500 text-black text-sm rounded-lg hover:bg-blue-light-4 transition-all"
                             >
                               ❌ 삭제
                             </button>

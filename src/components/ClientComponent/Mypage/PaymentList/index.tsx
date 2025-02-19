@@ -72,7 +72,7 @@ const PaymentList = () => {
   if (error) return <p className="text-center text-red-500">{error}</p>;
 
   return (
-    <section className="mb-10 p-6 bg-gray-100 shadow-lg rounded-xl">
+    <section className="mb-10 p-6 bg-gray shadow-lg rounded-xl">
       <h2 className="text-2xl font-bold mb-4">구매 내역</h2>
       {payments.length === 0 ? (
         <p className="text-gray-500 text-center">구매 내역이 없습니다.</p>

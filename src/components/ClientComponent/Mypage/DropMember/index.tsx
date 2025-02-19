@@ -57,7 +57,7 @@ const DropMember = () => {
       {/* ✅ 회원 탈퇴 버튼 */}
       <button 
         onClick={handleDropMember}
-        className="px-6 py-3 bg-red-600 text-black font-medium rounded-lg hover:bg-red-700 transition-all duration-200"
+        className="px-6 py-3 bg-red-600 text-black font-medium rounded-lg hover:bg-dark-2 transition-all duration-200"
         disabled={loading}
       >
         {loading ? "탈퇴 진행 중..." : "회원 탈퇴"}
@@ -66,7 +66,7 @@ const DropMember = () => {
       {/* ✅ 개인정보 수정 버튼 */}
       <button
         onClick={() => router.push("/mypage/edit-information")}
-        className="px-6 py-3 bg-blue-500 text-black font-medium rounded-lg hover:bg-blue-600 transition-all duration-200"
+        className="px-6 py-3 bg-blue-500 text-black font-medium rounded-lg hover:bg-red transition-all duration-200"
       >
         ✏️ 개인정보 수정
       </button>

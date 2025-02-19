@@ -72,7 +72,7 @@ const FillPoint = () => {
           />
           <button
             onClick={handleChargePoint}
-            className="px-5 py-3 bg-blue-600 text-black font-medium rounded-lg hover:bg-blue-700 transition-all duration-200"
+            className="px-5 py-3 bg-blue-600 text-black font-medium rounded-lg hover:underline transition-all duration-200"
             disabled={loading}
           >
             {loading ? "recharging..." : "recharge"}

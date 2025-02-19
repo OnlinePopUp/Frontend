@@ -28,14 +28,20 @@ const MyPage = () => {
 
   return (
     <div className="max-w-4xl mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6 text-center">My Page</h1>
+      
 
       {/* ✅ URL email과 localStorage userEmail이 다른 경우에만 FollowBox 표시 */}
-      {urlEmail !== localEmail && <FollowBox />}
+      {urlEmail !== localEmail && (
+        <div className="mb-6"> {/* ✅ FollowBox 아래 공백 추가 */}
+          <FollowBox />
+        </div>
+      )}
 
       {/* ✅ URL email과 localStorage userEmail이 일치하는 경우 */}
       {urlEmail === localEmail ? (
         <>
+          <h1 className="text-3xl font-bold mb-6 text-center">My Page</h1>
+
           {/* ✅ 포인트 충전 */}
           <div className="mb-6">
             <FillPoint />
@@ -54,6 +60,7 @@ const MyPage = () => {
         </>
       ) : (
         // ✅ 일치하지 않으면 FollowsSectionList만 렌더링
+        
         <FollowsSectionList />
       )}
     </div>

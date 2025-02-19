@@ -106,7 +106,7 @@ const FollowsSectionList = () => {
   };
 
   return (
-    <section className="mb-10 p-6 bg-gray-100 shadow-lg rounded-xl">
+    <section className="mb-10 p-6 bg-gray shadow-lg rounded-xl">
       <h2 className="text-2xl font-bold text-gray-800 mb-6">
         {urlEmail === userEmail ? "내 팔로우 & 팔로워 & 게시글 목록" : `${urlEmail}님의 정보`}
       </h2>
@@ -116,25 +116,25 @@ const FollowsSectionList = () => {
       {/* ✅ Follow, Follower, PostWritten 탭 버튼 추가 */}
       <div className="flex justify-center gap-4 mb-6">
         <button
-          className={`px-4 py-2 rounded-lg ${selectedTab === "follow" ? "bg-blue-500 text-white" : "bg-gray-300 text-black"}`}
+          className={`px-4 py-2 rounded-lg ${selectedTab === "follow" ? "bg-green-light-2 text-black" : "bg-green-light-4 text-black"}`}
           onClick={() => setSelectedTab("follow")}
         >
           팔로잉 ({followingCount})
         </button>
         <button
-          className={`px-4 py-2 rounded-lg ${selectedTab === "follower" ? "bg-blue-500 text-white" : "bg-gray-300 text-black"}`}
+          className={`px-4 py-2 rounded-lg ${selectedTab === "follower" ? "bg-green-light-2 text-black" : "bg-green-light-4 text-black"}`}
           onClick={() => setSelectedTab("follower")}
         >
           팔로워 ({followerCount})
         </button>
         <button
-          className={`px-4 py-2 rounded-lg ${selectedTab === "posts" ? "bg-blue-500 text-white" : "bg-gray-300 text-black"}`}
+          className={`px-4 py-2 rounded-lg ${selectedTab === "posts" ? "bg-green-light-2 text-black" : "bg-green-light-4 text-black"}`}
           onClick={() => setSelectedTab("posts")}
         >
           작성한 게시글
         </button>
         <button
-          className={`px-4 py-2 rounded-lg ${selectedTab === "likeposts" ? "bg-blue-500 text-white" : "bg-gray-300 text-black"}`}
+          className={`px-4 py-2 rounded-lg ${selectedTab === "likeposts" ? "bg-green-light-2 text-black" : "bg-green-light-4 text-black"}`}
           onClick={() => setSelectedTab("likeposts")}
         >
           좋아요한 게시글

@@ -43,7 +43,7 @@ const Follow: React.FC<FollowProps> = ({
               {isMyPage && (
                 <button
                   onClick={() => handleUnfollow(followingEmails[index])}
-                  className="px-4 py-2 text-sm text-black bg-red-500 rounded-lg hover:bg-dark-2 transition-all duration-200"
+                  className="px-4 py-2 text-sm text-black bg-red-500 rounded-lg hover:bg-blue  transition-all duration-200"
                 >
                   언팔로우
                 </button>

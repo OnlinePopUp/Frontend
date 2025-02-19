@@ -63,7 +63,7 @@ const FollowSection = () => {
   };
 
   return (
-    <section className="mb-10 p-6 bg-gray-100 shadow-lg rounded-xl">
+    <section className="mb-10 p-6 bg-gray shadow-lg rounded-xl">
       <h2 className="text-2xl font-bold text-gray-800 mb-6">팔로우 추가</h2>
 
       {/* 이메일 입력 폼 + 요청 버튼 */}
@@ -77,7 +77,7 @@ const FollowSection = () => {
         />
         <button
           onClick={handleFollow}
-          className="w-full md:w-auto px-6 py-3 bg-dark-DEFAULT text-black font-medium rounded-lg hover:bg-dark-2 transition-all duration-200"
+          className="w-full md:w-auto px-6 py-3 bg-dark-DEFAULT text-black font-medium rounded-lg hover:bg-blue transition-all duration-200"
           disabled={loading}
         >
           {loading ? "요청 중..." : "팔로우 요청"}

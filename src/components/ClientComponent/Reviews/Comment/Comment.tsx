@@ -94,7 +94,7 @@ const Comment: React.FC<CommentProps> = ({ boardId, closePopup, initialContent =
 
   return (
     <div
-      className="fixed inset-0 flex items-center justify-center bg-green-light-4 bg-opacity-50 z-50 transition-opacity"
+      className="fixed inset-0 flex items-center justify-center  bg-opacity-50 z-50 transition-opacity"
       onClick={closePopup} 
     >
       <div

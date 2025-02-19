@@ -56,7 +56,7 @@ const LikePost = () => {
           {likedPosts.map((post, index) => (
             <li
               key={index}
-              className="p-4 border rounded-lg shadow-md hover:bg-gray-100 cursor-pointer transition"
+              className="p-4 border rounded-lg shadow-md hover:underline cursor-pointer transition"
               onClick={() => router.push(`/reviews/detail?boardId=${post.boardId}`)} // ✅ 클릭 시 상세 페이지 이동
             >
               <h3 className="text-lg font-semibold">{post.name}</h3>

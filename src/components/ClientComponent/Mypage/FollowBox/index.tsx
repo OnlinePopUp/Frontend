@@ -255,7 +255,7 @@ const FollowBox = () => {
     
 
   return (
-    <div className="p-4 bg-white shadow-md rounded-lg text-center">
+    <div className="p-4 bg-gray shadow-md rounded-lg text-center">
       <h3 className="text-xl font-bold text-gray-800 mb-2">{urlEmail}님의 활동 정보</h3>
 
       {loading ? (
@@ -308,7 +308,7 @@ const FollowBox = () => {
 
             <button
               onClick={handleOpenChat}
-              className="px-4 py-2 text-sm text-black bg-green-500 rounded-lg hover:bg-green-600 transition-all"
+              className="px-4 py-2 text-sm text-black bg-green-500 rounded-lg hover:bg-blue transition-all"
             >
               💬 메시지 전송
             </button>
@@ -386,14 +386,14 @@ const FollowBox = () => {
               <div className="flex justify-between mt-4">
                 <button
                   onClick={handleReportSubmit}
-                  className="px-6 py-3 bg-red-500 text-black rounded-lg hover:bg-red-600 transition-all"
+                  className="px-6 py-3 bg-red-500 text-black rounded-lg hover:bg-red transition-all"
                 >
                   🚨 신고 제출
                 </button>
 
                 <button
                   onClick={() => setIsReportPopupOpen(false)}
-                  className="px-6 py-3 bg-gray-400 text-black rounded-lg hover:bg-gray-500 transition-all"
+                  className="px-6 py-3 bg-gray-400 text-black rounded-lg hover:bg-gray transition-all"
                 >
                   ❌ 닫기
                 </button>
