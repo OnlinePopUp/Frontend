@@ -34,7 +34,7 @@ const UpdateReviews = () => {
       formData.append("content", content);
 
       const response = await axios.post(
-        `http://47.130.76.132:8080/post/update/${boardId}`,
+        `/post/update/${boardId}`,
         formData, // ✅ 요청 본문을 FormData로 설정
         {
           headers: {
@@ -61,7 +61,7 @@ const UpdateReviews = () => {
       console.log(`🔹 서버에 POST 요청: /post/delete/${boardId}`);
       
       const response = await axios.post(
-        `http://47.130.76.132:8080/post/delete/${boardId}`, 
+        `/post/delete/${boardId}`, 
         {}, // ✅ POST 요청이므로 빈 객체 전송
         {
           headers: {
