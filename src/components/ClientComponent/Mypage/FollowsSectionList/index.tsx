@@ -25,7 +25,8 @@ const FollowsSectionList = () => {
   useEffect(() => {
     setUserEmail(localStorage.getItem("userEmail"));
     setAccessToken(localStorage.getItem("accessToken"));
-  }, []);
+  }, [userEmail, accessToken]); // ✅ 의존성 배열에 추가하여 값 변경 시 실행
+  
 
   // ✅ 서버에서 특정 email의 팔로우 & 팔로워 목록 가져오기
   useEffect(() => {
@@ -71,7 +72,7 @@ const FollowsSectionList = () => {
     if (urlEmail || userEmail) {
       fetchFollowData();
     }
-  }, [urlEmail, userEmail]);
+  }, [urlEmail, userEmail, accessToken]);
 
   // ✅ 언팔로우 기능 (본인 계정일 경우만 가능)
   const handleUnfollow = async (flwEmail: string) => {

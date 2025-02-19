@@ -22,7 +22,7 @@ const Posted = () => {
     const fetchTotalPosts = async () => {
       try {
         console.log(`🔹 서버에 GET 요청: /post/all?size=${pageSize}&page=0`);
-        const response = await axios.get(`http://47.130.76.132:8080/post/all?size=${pageSize}&page=0`);
+        const response = await axios.get(`/post/all?size=${pageSize}&page=0`);
         console.log(`🔹 전체 게시글 응답 데이터:`, response.data);
 
         if (response.data && Array.isArray(response.data.board)) {
@@ -38,14 +38,14 @@ const Posted = () => {
     };
 
     fetchTotalPosts();
-  }, []);
+  }, [pageSize]);
 
   const fetchPosts = async (page: number) => {
     if (pageSize === 999) return;
 
     try {
       console.log(`🔹 서버에 GET 요청: /post/all?size=${pageSize}&page=${page}`);
-      const response = await axios.get(`http://47.130.76.132:8080/post/all?size=${pageSize}&page=${page}`);
+      const response = await axios.get(`/post/all?size=${pageSize}&page=${page}`);
 
       console.log(`🔹 ${page}페이지 응답 데이터:`, response.data);
 
@@ -83,7 +83,7 @@ const Posted = () => {
 
     try {
       console.log(`🔹 서버에 GET 요청: /post/search?category=${searchCategory}&keyword=${keyword}&size=999&page=0`);
-      const response = await axios.get(`http://47.130.76.132:8080/post/search`, {
+      const response = await axios.get(`/post/search`, {
         params: { category: searchCategory, keyword, size: 999, page: 0 }
       });
 
@@ -190,6 +190,21 @@ const Posted = () => {
               )}
             </li>
           ))}
+          {/* ✅ 페이지네이션 버튼 */}
+          <div className="flex justify-center mt-6 space-x-2">
+            {Array.from({ length: totalPages }).map((_, index) => (
+              <button
+                key={index}
+                className={`px-3 py-2 rounded-lg ${
+                  index === currentPage ? "bg-blue-500 text-black" : "bg-gray-300 text-black"
+                }`}
+                onClick={() => setCurrentPage(index)}
+              >
+                {index + 1}
+              </button>
+            ))}
+          </div>
+
         </ul>
       ) : (
         <p className="text-gray-500 text-center">게시글이 없습니다.</p>

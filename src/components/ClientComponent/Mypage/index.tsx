@@ -21,7 +21,7 @@ const MyPage = () => {
     setIsLoading(false); // ✅ 데이터 로딩 완료
     console.log("📌 localStorage userEmail:", storedEmail);
     console.log("📌 URL email:", urlEmail);
-  }, []);
+  }, [urlEmail]);
 
   // ✅ 데이터 로딩 중이면 화면에 아무것도 렌더링하지 않음
   if (isLoading) return <p className="text-center text-gray-500">로딩 중...</p>;
