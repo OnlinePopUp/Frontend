@@ -18,6 +18,7 @@ const Posted = () => {
   const userEmail = typeof window !== "undefined" ? localStorage.getItem("userEmail") : null;
 
   useEffect(() => {
+    
     const fetchTotalPosts = async () => {
       try {
         console.log(`🔹 서버에 GET 요청: /post/all?size=${pageSize}&page=0`);
