@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 interface ItemEditProps {
     itemId: string;
@@ -188,7 +189,7 @@ const ItemEdit: React.FC<ItemEditProps> = ({ itemId }) => {
                     <div className="flex flex-wrap gap-2 mt-4">
                         {selectedFiles.map((file, index) => (
                             <div key={index} className="relative">
-                                <img
+                                <Image 
                                     src={URL.createObjectURL(file)}
                                     alt={`새 파일 ${index + 1}`}
                                     className="w-20 h-20 object-cover rounded shadow"

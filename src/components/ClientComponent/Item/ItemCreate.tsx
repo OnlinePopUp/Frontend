@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 const ItemCreate: React.FC = () => {
     const [item, setItem] = useState({
@@ -135,7 +136,7 @@ const ItemCreate: React.FC = () => {
                     <div className="flex flex-wrap gap-2 mt-4">
                         {selectedFiles.map((file, index) => (
                             <div key={index} className="relative">
-                                <img
+                                <Image
                                     src={URL.createObjectURL(file)}
                                     alt={`새 파일 ${index + 1}`}
                                     className="w-20 h-20 object-cover rounded shadow"

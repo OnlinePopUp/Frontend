@@ -2,18 +2,30 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
+
+// ✅ Item 인터페이스 정의 (타입 명확히 지정)
+interface Item {
+    itemId: number;
+    popId: number;
+    name: string;
+    amount: number;
+    price: number;
+    itemFiles?: string[]; // 파일이 없을 수도 있으므로 옵셔널 처리
+}
 
 interface ItemProps {
     onItemClick?: (itemId: number) => void;
 }
 
 const Item: React.FC<ItemProps> = ({ onItemClick }) => {
-    const [items, setItems] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [items, setItems] = useState<Item[]>([]); // ✅ Item[] 타입 지정
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
     const router = useRouter();
 
-    const [imageIndexes, setImageIndexes] = useState<{ [key: number]: number }>({});
+    // ✅ imageIndexes의 타입 명확히 지정
+    const [imageIndexes, setImageIndexes] = useState<Record<number, number>>({});
 
     useEffect(() => {
         const fetchItems = async () => {
@@ -26,27 +38,27 @@ const Item: React.FC<ItemProps> = ({ onItemClick }) => {
                 const response = await fetch("http://47.130.76.132:8080/item", {
                     method: "GET",
                     headers: {
-                        "Authorization": `${token}`,
-                        "Accept": "application/json"
-                    }
+                        Authorization: `${token}`,
+                        Accept: "application/json",
+                    },
                 });
 
                 if (!response.ok) {
                     throw new Error(`HTTP 오류 Status: ${response.status}`);
                 }
 
-                const data = await response.json();
+                const data: Item[] = await response.json();
                 console.log("가져오는 데이터 확인:", JSON.stringify(data[0], null, 2));
                 setItems(data);
 
-                // 초기 이미지 인덱스를 0으로 설정
-                const initialIndexes = data.reduce((acc, item) => {
+                // ✅ 초기 이미지 인덱스를 0으로 설정
+                const initialIndexes: Record<number, number> = data.reduce((acc, item) => {
                     acc[item.itemId] = 0;
                     return acc;
-                }, {});
+                }, {} as Record<number, number>);
                 setImageIndexes(initialIndexes);
             } catch (error) {
-                setError(error.message);
+                setError((error as Error).message); // ✅ 오류 타입 변환
             } finally {
                 setLoading(false);
             }
@@ -55,16 +67,18 @@ const Item: React.FC<ItemProps> = ({ onItemClick }) => {
         fetchItems();
     }, []);
 
-    // 이전 이미지로 변경하는 함수
+    // ✅ 이전 이미지 변경 함수
     const handlePrevImage = (itemId: number, itemFiles: string[]) => {
+        if (!itemFiles || itemFiles.length === 0) return; // ✅ 파일이 없으면 실행 X
         setImageIndexes((prevIndexes) => ({
             ...prevIndexes,
             [itemId]: prevIndexes[itemId] > 0 ? prevIndexes[itemId] - 1 : itemFiles.length - 1,
         }));
     };
 
-    // 다음 이미지로 변경하는 함수
+    // ✅ 다음 이미지 변경 함수
     const handleNextImage = (itemId: number, itemFiles: string[]) => {
+        if (!itemFiles || itemFiles.length === 0) return; // ✅ 파일이 없으면 실행 X
         setImageIndexes((prevIndexes) => ({
             ...prevIndexes,
             [itemId]: (prevIndexes[itemId] + 1) % itemFiles.length,
@@ -78,10 +92,10 @@ const Item: React.FC<ItemProps> = ({ onItemClick }) => {
         <div className="container mx-auto p-4">
             <h2 className="text-2xl font-bold mb-4">전체 아이템 조회</h2>
             <button
-                    className="bg-blue-500 text-black px-4 py-2 rounded hover:bg-blue-600"
-                    onClick={() => router.push("/item/create")}
-                >
-                    상품 등록
+                className="bg-blue-500 text-black px-4 py-2 rounded hover:bg-blue-600"
+                onClick={() => router.push("/item/create")}
+            >
+                상품 등록
             </button>
             <table className="w-full border-collapse border border-gray-300">
                 <thead>
@@ -108,25 +122,25 @@ const Item: React.FC<ItemProps> = ({ onItemClick }) => {
                             <td className="border border-gray-300 px-4 py-2">{item.price.toLocaleString()} 원</td>
                             <td className="border border-gray-300 px-4 py-2">
                                 <div className="flex items-center justify-center space-x-2">
-                                    <button 
+                                    <button
                                         className="bg-gray-300 px-2 py-1 rounded hover:bg-gray-400"
                                         onClick={(e) => {
                                             e.stopPropagation();
-                                            handlePrevImage(item.itemId, item.itemFiles);
+                                            if (item.itemFiles) handlePrevImage(item.itemId, item.itemFiles);
                                         }}
                                     >
                                         ◀
                                     </button>
-                                    <img
-                                        src={item.itemFiles?.[imageIndexes[item.itemId]] || ""}
+                                    <Image 
+                                        src={item.itemFiles && item.itemFiles.length > 0 ? item.itemFiles[imageIndexes[item.itemId]] : ""}
                                         alt={item.name}
                                         className="w-20 h-20 object-cover"
                                     />
-                                    <button 
+                                    <button
                                         className="bg-gray-300 px-2 py-1 rounded hover:bg-gray-400"
                                         onClick={(e) => {
                                             e.stopPropagation();
-                                            handleNextImage(item.itemId, item.itemFiles);
+                                            if (item.itemFiles) handleNextImage(item.itemId, item.itemFiles);
                                         }}
                                     >
                                         ▶

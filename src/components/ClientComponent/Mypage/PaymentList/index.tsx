@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import axios from "@/utils/axiosConfig";
+import Image from "next/image";
 
 const PaymentList = () => {
   const [payments, setPayments] = useState([]);
@@ -107,7 +108,7 @@ const PaymentList = () => {
               <h3 className="text-xl font-semibold text-gray-700 mb-4">📦 주문 상품</h3>
               {selectedPayments.map((payment) => (
                 <div key={payment.paymentId} className="flex items-start gap-4 pb-4 mb-4">
-                  <img src={payment.imageUrl} alt="상품 이미지" className="w-24 h-24 object-cover rounded-lg shadow-md" />
+                  <Image src={payment.imageUrl} alt="상품 이미지" className="w-24 h-24 object-cover rounded-lg shadow-md" />
                   <div>
                     <p className="text-lg font-semibold text-gray-800">{payment.itemName}</p>
                     <p className="text-gray-600 text-sm">옵션: {payment.options}</p>

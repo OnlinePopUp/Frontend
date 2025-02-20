@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from "@/utils/axiosConfig";
 import { useSearchParams, useRouter } from "next/navigation";
 import Comment from "../Comment/Comment"; // ✅ Comment 컴포넌트 import
+import Image from "next/image";
 
 const Detail = () => {
   const [post, setPost] = useState<any>(null);
@@ -191,8 +192,29 @@ const handleLikeCommentToggle = async (cmtId: number, liked: boolean) => {
           >
             {liked ? "💔 좋아요 취소" : "❤️ 좋아요"} ({post.board.heart})
           </button>
-
           </div>
+
+          {/* ✅ 게시글 이미지 출력 */}
+          {post.boardFile?.length > 0 && (
+            <div className="mt-6">
+              <h3 className="text-lg font-semibold mb-2">📷 게시글 이미지</h3>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {post.boardFile.map((imageUrl: string, index: number) => (
+                  <div key={index} className="relative w-full h-40">
+                    <Image
+                      src={imageUrl}
+                      alt={`게시글 이미지 ${index + 1}`}
+                      layout="fill"
+                      objectFit="cover"
+                      className="rounded-lg shadow-md"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+        
 
           {/* ✅ 댓글 작성 버튼 */}
           <div className="mt-6">

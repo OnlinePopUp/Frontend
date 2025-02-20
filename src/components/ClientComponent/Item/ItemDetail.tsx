@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 interface ItemDetailProps {
     itemId: string;
@@ -153,7 +154,7 @@ const ItemDetail: React.FC<ItemDetailProps> = ({ itemId }) => {
                     {item.itemFiles && item.itemFiles.length > 0 && (
                         <div className="flex flex-wrap gap-2 mt-4">
                             {item.itemFiles.map((fileUrl: string, index: number) => (
-                                <img
+                                <Image
                                     key={index}
                                     src={fileUrl}
                                     alt={`${item.name} 이미지 ${index + 1}`}

@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 interface ItemProps {
     onItemClick?: (itemId: number) => void;
@@ -117,7 +118,7 @@ const Item: React.FC<ItemProps> = ({ onItemClick }) => {
                                     >
                                         ◀
                                     </button>
-                                    <img
+                                    <Image
                                         src={item.itemFiles?.[imageIndexes[item.itemId]] || ""}
                                         alt={item.name}
                                         className="w-20 h-20 object-cover"

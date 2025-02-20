@@ -43,6 +43,7 @@ const Main: React.FC = () => {
             <h2 className="text-heading-2 font-semibold text-blue-600 hover:underline hover:text-blue-800 transition-all cursor-pointer">
               {store.title}
             </h2>
+            
             <p className="text-custom-lg mt-4">{store.description}</p>
           </div>
 
@@ -61,7 +62,8 @@ const Main: React.FC = () => {
                   height={250}
                   className="object-contain rounded-lg flex-shrink-0"
                   quality={90}
-                />
+                />        
+                
 
                 {/* 상품 정보 (제목, 가격, 설명) */}
                 <div className="flex flex-col justify-center flex-grow">
@@ -70,6 +72,7 @@ const Main: React.FC = () => {
                   <p className="text-base text-gray-700 mt-2 leading-relaxed">{product.description}</p>
                 </div>
               </div>
+              
             ))}
           </div>
         </div>

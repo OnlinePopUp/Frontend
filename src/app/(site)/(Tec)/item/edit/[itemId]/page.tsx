@@ -6,9 +6,12 @@ import ItemEdit from "../../component/ItemEdit";
 
 const EditItemPage = () => {
     const params = useParams();
-    const itemId = params?.itemId;
+    const rawItemId = params?.itemId;
 
-    if (!itemId) return <p>Error: 아이템 ID {itemId}가 존재하지 않습니다.</p>;
+    // ✅ `string | string[] | undefined` → `string` 변환
+    const itemId: string | undefined = Array.isArray(rawItemId) ? rawItemId[0] : rawItemId;
+
+    if (!itemId) return <p>Error: 아이템 ID가 존재하지 않습니다.</p>;
 
     return <ItemEdit itemId={itemId} />;
 };

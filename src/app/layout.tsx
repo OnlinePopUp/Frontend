@@ -6,15 +6,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body>
-        {/* <ServerLayout> */}
-        {/* <RootLayout> */}
+        <RootLayout>
+            {/* 헤더 */}
             <TecLayout> 
-              {/* <div style={{ minHeight: "1000vh" }}> 최소 높이 설정 */}
                {children}
-              {/* </div> */}
             </TecLayout>
-        {/* </RootLayout> */}
-        {/* </ServerLayout> */}
+        </RootLayout>
       </body>
     </html>
   );

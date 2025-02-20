@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
 
 const Cart = () => {
     const [cartItems, setCartItems] = useState([]);
@@ -131,7 +132,7 @@ const Cart = () => {
                                 </div>
                             </td>
                             <td className="border border-gray-300 px-4 py-2">
-                                <img
+                                <Image
                                     src={item.imageUrl}
                                     alt={item.itemName}
                                     className="w-20 h-20 object-cover mx-auto"
