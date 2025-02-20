@@ -44,8 +44,11 @@ export default function Navbar() {
             <div>
                 <Searchform/>
             </div>
+            
             <div className="navbar-cart">
-                <Link href="/cart"><FontAwesomeIcon icon={faCartShopping} width="30"/></Link>
+                <Link href="/cart">
+                    장바구니
+                </Link>
             </div>
 
             {/* ✅ "후기 게시판" 버튼 추가 */}
@@ -54,6 +57,8 @@ export default function Navbar() {
                     후기 게시판
                 </Link>
             </div>
+
+            
         </div>
     )
 }

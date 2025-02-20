@@ -180,7 +180,7 @@ export default function FormComponent() {
                 </div>
                 <br/>
                 <div className="flex items-center justify-center">
-                    <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg text-lg focus:outline-none focus:shadow-outline">
+                    <button type="submit" className="bg-gray-2 hover:bg-blue text-black font-bold py-3 px-6 rounded-lg text-lg focus:outline-none focus:shadow-outline">
                     등록
                     </button>
                 </div>

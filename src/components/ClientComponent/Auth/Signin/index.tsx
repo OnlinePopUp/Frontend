@@ -104,7 +104,7 @@ const Signin = () => {
                     Email
                   </label>
                   <input
-                    type="email"
+                    type="text"  // ✅ type="email" → type="text"
                     name="email"
                     id="email"
                     placeholder="Enter your email"

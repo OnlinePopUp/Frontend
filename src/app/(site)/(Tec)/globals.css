@@ -120,10 +120,50 @@ a {
   color: #0000ff;
 }
 
+.navbar-reviews {
+  position: absolute;
+  top: 50%;
+  left: 52%;
+  transform: translate(0%, -50%);
+}
+
+.review-button {
+  padding: 8px 6px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.review-button:hover {
+  color: #af3333;
+}
+
+.navbar-logout {
+  padding: 6px 4px; /* 패딩을 줄여서 공간 확보 */
+  position: absolute;
+  top: 50%;
+  right: 2%;
+  transform: translate(0%, -50%);
+}
+
+.logout-button {
+  padding: 8px 6px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.logout-button:hover {
+  color: #af3333;
+}
+
+
 .searchSpace {
   position: absolute;
   top: 50%;
-  right: 15%;
+  right: 13%;
   width: 450px;
   height: 50px;
   color: #aa0000;
@@ -143,7 +183,7 @@ a {
 .searchBtn {
   position: absolute;
   top: 50%;
-  right: 15%;
+  right: 13%;
   width: 50px;
   height: 50px;
   border-radius: 50% 50% 50% 50% / 50% 50% 50% 50%;
@@ -161,7 +201,7 @@ a {
 .navbar-cart {
   position: absolute;
   top: 50%;
-  right: 10%;
+  right: 3%;
   transform: translate(0%, -40%);
 }
 
@@ -224,23 +264,4 @@ a {
   margin-top: 12vh;
 }
 
-.navbar-reviews {
-  position: absolute;
-  top: 50%;
-  right: 1%;
-  transform: translate(0%, -50%);
-}
 
-.review-button {
-  padding: 8px 6px;
-  background-color: #007bff;
-  color: white;
-  border-radius: 6px;
-  text-decoration: none;
-  font-weight: bold;
-  transition: background-color 0.3s ease-in-out;
-}
-
-.review-button:hover {
-  background-color: #0056b3;
-}
