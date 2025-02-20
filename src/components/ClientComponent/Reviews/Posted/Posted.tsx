@@ -1,105 +1,71 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import axios from "@/utils/axiosConfig";
-import { useRouter } from "next/navigation"; // ✅ Next.js의 useRouter 추가
+import { useRouter } from "next/navigation";
 
 const Posted = () => {
   const [posts, setPosts] = useState<any[][]>([]);
   const [nicknames, setNicknames] = useState<string[][]>([]);
   const [currentPage, setCurrentPage] = useState(0);
-  const [totalPages, setTotalPages] = useState(0);
-  const [pageSize, setPageSize] = useState(999);
-  const [searchCategory, setSearchCategory] = useState("name"); // ✅ 검색 카테고리
-  const [keyword, setKeyword] = useState(""); // ✅ 검색어
-  const [isSearching, setIsSearching] = useState(false); // ✅ 검색 여부 상태
-  const router = useRouter(); // ✅ Next.js Router 추가
+  const [totalPages, setTotalPages] = useState(30); // ✅ 초기 페이지 10개
+  const [pageSize, setPageSize] = useState(6); // ✅ size=6 고정
+  const [searchCategory, setSearchCategory] = useState("name");
+  const [keyword, setKeyword] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
+  const router = useRouter();
 
-  // ✅ LocalStorage에서 사용자 이메일 가져오기
   const userEmail = typeof window !== "undefined" ? localStorage.getItem("userEmail") : null;
 
-  useEffect(() => {
-    
-    const fetchTotalPosts = async () => {
-      try {
-        console.log(`🔹 서버에 GET 요청: /post/all?size=${pageSize}&page=0`);
-        const response = await axios.get(`/post/all?size=${pageSize}&page=0`);
-        console.log(`🔹 전체 게시글 응답 데이터:`, response.data);
-
-        if (response.data && Array.isArray(response.data.board)) {
-          const totalPosts = response.data.totalElements || response.data.board.length;
-          setTotalPages(Math.ceil(totalPosts / 6));
-          setPageSize(6);
-        } else {
-          console.warn("🚨 응답 데이터가 올바르지 않습니다.", response.data);
-        }
-      } catch (error: any) {
-        console.error("🚨 게시글 개수 가져오기 실패:", error.response?.data || error.message);
-      }
-    };
-
-    fetchTotalPosts();
-  }, [pageSize]);
-
-  const fetchPosts = async (page: number) => {
-    if (pageSize === 999) return;
-
+  const fetchPosts = async () => {
     try {
-      console.log(`🔹 서버에 GET 요청: /post/all?size=${pageSize}&page=${page}`);
-      const response = await axios.get(`/post/all?size=${pageSize}&page=${page}`);
+      let updatedPosts: any[][] = [];
+      let updatedNicknames: string[][] = [];
+      let validPages = [];
 
-      console.log(`🔹 ${page}페이지 응답 데이터:`, response.data);
+      for (let i = 0; i < 10; i++) {
+        console.log(`🔹 서버에 GET 요청: /post/all?size=${pageSize}&page=${i}`);
+        const response = await axios.get(`/post/all?size=${pageSize}&page=${i}`);
 
-      if (response.data && Array.isArray(response.data.board)) {
-        setPosts((prev) => {
-          const newPosts = [...prev];
-          newPosts[page] = response.data.board;
-          return newPosts;
-        });
-
-        setNicknames((prev) => {
-          const newNicknames = [...prev];
-          newNicknames[page] = response.data.nickname || [];
-          return newNicknames;
-        });
-      } else {
-        console.warn(`🚨 ${page}페이지 응답 데이터가 올바르지 않습니다.`, response.data);
+        if (response.data && Array.isArray(response.data.board) && response.data.board.length > 0) {
+          updatedPosts.push(response.data.board);
+          updatedNicknames.push(response.data.nickname || []);
+          validPages.push(i);
+        }
       }
+
+      setPosts(updatedPosts);
+      setNicknames(updatedNicknames);
+      setTotalPages(validPages.length); // ✅ 실제 데이터가 있는 페이지 개수만 반영
+      setCurrentPage(0);
     } catch (error: any) {
-      console.error(`🚨 ${page}페이지 게시글 가져오기 실패:`, error.response?.data || error.message);
+      console.error("🚨 게시글 가져오기 실패:", error.response?.data || error.message);
     }
   };
 
   useEffect(() => {
-    if (totalPages > 0 && !isSearching) {
-      fetchPosts(currentPage);
+    if (!isSearching) {
+      fetchPosts();
     }
-  }, [currentPage, totalPages, isSearching]);
+  }, [isSearching]);
 
-  // ✅ 검색 요청 함수
+  // ✅ 검색 요청
   const handleSearch = async () => {
-    if (!keyword.trim()) return; // 빈 검색어 방지
+    if (!keyword.trim()) return;
 
-    setIsSearching(true); // 검색 시작
+    setIsSearching(true);
 
     try {
       console.log(`🔹 서버에 GET 요청: /post/search?category=${searchCategory}&keyword=${keyword}&size=999&page=0`);
       const response = await axios.get(`/post/search`, {
-        params: { category: searchCategory, keyword, size: 999, page: 0 }
+        params: { category: searchCategory, keyword, size: 999, page: 0 },
       });
 
-      console.log("🔹 검색 결과:", response.data);
-
       if (response.data && Array.isArray(response.data.board)) {
-        const totalPosts = response.data.totalElements || response.data.board.length;
-        setTotalPages(Math.ceil(totalPosts / 6));
-        setPageSize(6);
-
-        setPosts([response.data.board]); // 검색 결과 저장 (0번째 페이지에 저장)
+        setPosts([response.data.board]);
         setNicknames([response.data.nickname || []]);
-
-        setCurrentPage(0); // 첫 페이지부터 시작
+        setTotalPages(1);
+        setCurrentPage(0);
       } else {
-        console.warn("🚨 검색 응답 데이터가 올바르지 않습니다.", response.data);
         setPosts([]);
         setTotalPages(0);
       }
@@ -112,18 +78,16 @@ const Posted = () => {
 
   return (
     <section className="max-w-3xl mx-auto p-6 bg-yellow-light-2 shadow-md rounded-lg">
-      {/* ✅ 게시글 목록 제목 & 새로고침 버튼 */}
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-semibold">게시글 목록</h2>
         <button
-          onClick={() => window.location.reload()}
+          onClick={fetchPosts}
           className="px-4 py-2 bg-gray-300 text-black rounded-lg hover:bg-gray-400 transition-all"
         >
           새로고침 🔄
         </button>
       </div>
 
-      {/* ✅ 게시글 작성 버튼 추가 */}
       <button
         onClick={() => router.push("/create-reviews")}
         className="px-4 py-2 bg-green-500 text-black rounded-lg hover:bg-blue-light-2 transition-all"
@@ -131,7 +95,6 @@ const Posted = () => {
         ✍️ 게시글 작성
       </button>
 
-      {/* ✅ 검색 바 추가 */}
       <div className="flex items-center gap-4 mb-4">
         <select
           className="p-2 border rounded-lg"
@@ -172,7 +135,6 @@ const Posted = () => {
                 <p className="text-xs text-gray-500">작성자: {nicknames[currentPage]?.[index] || "알 수 없음"}</p>
               </div>
 
-              {/* ✅ 본인 게시글만 수정 버튼 표시 */}
               {userEmail === post.email && (
                 <button
                   className="px-3 py-2 bg-blue-500 text-black text-sm rounded-lg hover:bg-blue-light-2 transition-all"
@@ -190,7 +152,7 @@ const Posted = () => {
               )}
             </li>
           ))}
-          {/* ✅ 페이지네이션 버튼 */}
+
           <div className="flex justify-center mt-6 space-x-2">
             {Array.from({ length: totalPages }).map((_, index) => (
               <button
@@ -204,7 +166,6 @@ const Posted = () => {
               </button>
             ))}
           </div>
-
         </ul>
       ) : (
         <p className="text-gray-500 text-center">게시글이 없습니다.</p>

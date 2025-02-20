@@ -80,7 +80,7 @@ const FollowSection = () => {
           className="w-full md:w-auto px-6 py-3 bg-dark-DEFAULT text-black font-medium rounded-lg hover:bg-blue transition-all duration-200"
           disabled={loading}
         >
-          {loading ? "요청 중..." : "팔로우 요청"}
+          {loading ? "요청 중..." : "follow"}
         </button>
       </div>
 
