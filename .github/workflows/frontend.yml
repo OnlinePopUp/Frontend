@@ -54,17 +54,6 @@ jobs:
           chmod -R +r ./.next             # 빌드 결과에 읽기 권한 부여
           ls ./.next                      # 빌드 디렉토리 내용 확인
 
-      # - name: 파일 목록 확인
-      #   run: |
-      #     ls -al ./.next
-      #     ls -al package.json || echo "package.json 파일 없음"
-      #     ls -al package-lock.json || echo "package-lock.json 파일 없음"
-      #     ls -al next.config.js || echo "next.config.js 파일 없음"
-      #     ls -al public || echo "public 폴더 없음"
-      #     ls -al .env || echo ".env 파일 없음"
-        
-      
-
       # 빌드의 결과물을 ec2 업로드
       # 대상 : ./.next/*
       # 타겟 : /home/ubuntu/client
@@ -78,20 +67,22 @@ jobs:
           source: ./.next/*
           target: /home/ubuntu/client
 
-      # /var/www/html/* <- 기존에 서비스 하던 내용을 모두 삭제(rm) 처리
-      # 뒷정리 (업로드 결과 -> nginx의 root로 이동(설정), 디렉토리 정리
-      - name: SSH로 EC2에 접속후, html등 내용 교체 후 웹서버 재가동
-        uses: appleboy/ssh-action@v1.2.0
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_KEY }}
-          script_stop: true
-          script: |
-            sudo rm -rf /var/www/html/*
-            sudo mv /home/ubuntu/client/.next/* /var/www/html
-            sudo systemctl restart nginx
-            sudo rm -rf /home/ubuntu/client
+      # # /var/www/html/* <- 기존에 서비스 하던 내용을 모두 삭제(rm) 처리
+      # # 뒷정리 (업로드 결과 -> nginx의 root로 이동(설정), 디렉토리 정리
+      # - name: SSH로 EC2에 접속후, html등 내용 교체 후 웹서버 재가동
+      #   uses: appleboy/ssh-action@v1.2.0
+      #   with:
+      #     host: ${{ secrets.EC2_HOST }}
+      #     username: ${{ secrets.EC2_USER }}
+      #     key: ${{ secrets.EC2_KEY }}
+      #     script_stop: true
+      #     script: |
+      #       sudo rm -rf /var/www/html/*
+      #       sudo mv /home/ubuntu/client/.next/* /var/www/html
+      #       sudo chmod -R 755 /var/www/html
+      #       sudo chown -R www-data:www-data /var/www/html
+      #       sudo systemctl restart nginx
+      #       sudo rm -rf /home/ubuntu/client
             
       # # EC2에 접속하여 애플리케이션 설치 및 동적 서버 실행 (pm2)
       # - name: EC2에서 애플리케이션 설치 및 실행
