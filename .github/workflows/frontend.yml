@@ -86,7 +86,13 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_KEY }}
-          source: ./.next/*
+          source: |
+            ./.next/*
+            package.json
+            package-lock.json
+            next.config.js
+            public
+            .env
           target: /home/ubuntu/client
 
       # # /var/www/html/* <- 기존에 서비스 하던 내용을 모두 삭제(rm) 처리
