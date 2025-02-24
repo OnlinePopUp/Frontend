@@ -80,7 +80,7 @@ jobs:
           script_stop: true
           script: |
             sudo rm -rf /var/www/html/*
-            sudo mv /home/ubuntu/client/build/* /var/www/html
+            sudo mv /home/ubuntu/client/.next/* /var/www/html
             sudo systemctl restart nginx
             sudo rm -rf /home/ubuntu/client
             
