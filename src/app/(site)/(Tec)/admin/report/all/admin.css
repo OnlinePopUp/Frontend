@@ -1,0 +1,40 @@
+@font-face {
+    font-family: 'NanumHumanTTFBold';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2501-1@1.1/NanumHumanTTFBold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+}
+
+.wholeReportPage {
+  position: absolute;
+  top: 12vh;
+  height: 400;
+  width: 100%;
+  font-family: 'NanumHumanTTFBold';
+  font-size: x-large;
+}
+
+.withDrawBtn {
+  margin-top: 10%;
+  width: 80px;
+  height: 35px;
+  border-radius: 1.5rem;
+  background-color: #3333FF;
+  color: white;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  font-size: medium;
+  font-weight: bold;
+}
+
+.withDrawBtn:hover {
+  font-size: medium;
+  font-weight: bold;
+  border-width: 3px;
+  border-color: #FF3333;
+  background-color: #FF3333;
+  color: white;
+  transition: all 0.3s ease;
+}
