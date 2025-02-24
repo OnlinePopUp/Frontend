@@ -104,7 +104,7 @@ jobs:
       #       sudo systemctl restart nginx
       #       sudo rm -rf /home/ubuntu/client
             
-      # EC2에 접속하여 애플리케이션 설치 및 동적 서버 실행 (PM2 사용)
+      # EC2에 접속하여 애플리케이션 설치 및 동적 서버 실행 
       - name: EC2에서 애플리케이션 설치 및 실행
         uses: appleboy/ssh-action@v1.2.0
         with:
