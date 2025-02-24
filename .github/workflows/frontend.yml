@@ -53,6 +53,11 @@ jobs:
           npm run build                   # 빌드 실행
           chmod -R +r ./.next             # 빌드 결과에 읽기 권한 부여
           ls ./.next                      # 빌드 디렉토리 내용 확인
+          chmod -R +r package.json
+          chmod -R +r package-lock.json
+          chmod -R +r next.config.js
+          chmod -R +r public
+          chmod -R +r .env
 
       - name: 파일 목록 확인
         run: |
