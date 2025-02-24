@@ -67,23 +67,8 @@ jobs:
           source: .
           target: /home/ubuntu/client
 
-      # # /var/www/html/* <- 기존에 서비스 하던 내용을 모두 삭제(rm) 처리
-      # # 뒷정리 (업로드 결과 -> nginx의 root로 이동(설정), 디렉토리 정리
-      # - name: SSH로 EC2에 접속후, html등 내용 교체 후 웹서버 재가동
-      #   uses: appleboy/ssh-action@v1.2.0
-      #   with:
-      #     host: ${{ secrets.EC2_HOST }}
-      #     username: ${{ secrets.EC2_USER }}
-      #     key: ${{ secrets.EC2_KEY }}
-      #     script_stop: true
-      #     script: |
-      #       sudo rm -rf /var/www/html/*
-      #       sudo mv /home/ubuntu/client/.next/* /var/www/html
-      #       sudo chmod -R 755 /var/www/html
-      #       sudo chown -R www-data:www-data /var/www/html
-      #       sudo systemctl restart nginx
-      #       sudo rm -rf /home/ubuntu/client
- 
+      # /var/www/html/* <- 기존에 서비스 하던 내용을 모두 삭제(rm) 처리
+      # 뒷정리 (업로드 결과 -> nginx의 root로 이동(설정), 디렉토리 정리
       - name: SSH로 EC2에 접속후, html등 내용 교체 후 웹서버 재가동
         uses: appleboy/ssh-action@v1.2.0
         with:
@@ -92,15 +77,30 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           script_stop: true
           script: |
-            sudo rm -rf /home/ubuntu/client/node_modules
-            cd /home/ubuntu/client
-            npm install
-            npm run build
+            sudo rm -rf /var/www/html/*
+            sudo mv /home/ubuntu/client/.next/* /var/www/html
+            sudo chmod -R 755 /var/www/html
+            sudo chown -R www-data:www-data /var/www/html
             sudo systemctl restart nginx
-            pm2 delete next-app || true
-            pm2 start npm --name "next-app" -- start
-            pm2 save
-            pm2 startup
+            sudo rm -rf /home/ubuntu/client
+ 
+      # - name: SSH로 EC2에 접속후, html등 내용 교체 후 웹서버 재가동
+      #   uses: appleboy/ssh-action@v1.2.0
+      #   with:
+      #     host: ${{ secrets.EC2_HOST }}
+      #     username: ${{ secrets.EC2_USER }}
+      #     key: ${{ secrets.EC2_KEY }}
+      #     script_stop: true
+      #     script: |
+      #       sudo rm -rf /home/ubuntu/client/node_modules
+      #       cd /home/ubuntu/client
+      #       npm install
+      #       npm run build
+      #       sudo systemctl restart nginx
+      #       pm2 delete next-app || true
+      #       pm2 start npm --name "next-app" -- start
+      #       pm2 save
+      #       pm2 startup
                 
 
       # # EC2에 접속하여 애플리케이션 설치 및 동적 서버 실행 (pm2)
