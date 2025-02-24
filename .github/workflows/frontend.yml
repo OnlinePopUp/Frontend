@@ -5,10 +5,10 @@ name: react CI/CD
 on:
   push:
     branches:
-      - master
+      - cicd
   pull_request:
     branches:
-      - master
+      - cicd
 
 # 해야 할 일들
 jobs:
