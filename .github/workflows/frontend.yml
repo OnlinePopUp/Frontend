@@ -45,7 +45,7 @@ jobs:
       #- name: 단위 테스트
       #  run: npm test
 
-      # 빌드
+      # 빌드 
       # run: npm run build
       - name: 빌드
         run: |
@@ -56,36 +56,65 @@ jobs:
 
       
 
-      # 빌드의 결과물을 ec2 업로드
-      # 대상 : ./.next/*
-      # 타겟 : /home/ubuntu/client
-      # 대상 위치에 존재하는 모든 리소스 -> ec2의 ~/client 하위에 복사
-      - name: EC2에 빌드된 파일/폴더들 업로드
+      # # 빌드의 결과물을 ec2 업로드
+      # # 대상 : ./.next/*
+      # # 타겟 : /home/ubuntu/client
+      # # 대상 위치에 존재하는 모든 리소스 -> ec2의 ~/client 하위에 복사
+      # - name: EC2에 빌드된 파일/폴더들 업로드
+      #   uses: appleboy/scp-action@v0.1.7
+      #   with:
+      #     host: ${{ secrets.EC2_HOST }}
+      #     username: ${{ secrets.EC2_USER }}
+      #     key: ${{ secrets.EC2_KEY }}
+      #     source: ./.next/*
+      #     target: /home/ubuntu/client
+
+      # EC2로 애플리케이션 파일 업로드
+      # 여기서는 동적 서버 실행에 필요한 파일(.next, package.json, next.config.js, public 폴더, .env 등)을 업로드합니다.
+      - name: EC2에 애플리케이션 파일 업로드
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_KEY }}
-          source: ./.next/*
+          source: |
+            .next
+            package.json
+            package-lock.json
+            next.config.js
+            public
+            .env
           target: /home/ubuntu/client
 
-      # /var/www/html/* <- 기존에 서비스 하던 내용을 모두 삭제(rm) 처리
-      # 뒷정리 (업로드 결과 -> nginx의 root로 이동(설정), 디렉토리 정리
-      - name: SSH로 EC2에 접속후, html등 내용 교체 후 웹서버 재가동
+      # # /var/www/html/* <- 기존에 서비스 하던 내용을 모두 삭제(rm) 처리
+      # # 뒷정리 (업로드 결과 -> nginx의 root로 이동(설정), 디렉토리 정리
+      # - name: SSH로 EC2에 접속후, html등 내용 교체 후 웹서버 재가동
+      #   uses: appleboy/ssh-action@v1.2.0
+      #   with:
+      #     host: ${{ secrets.EC2_HOST }}
+      #     username: ${{ secrets.EC2_USER }}
+      #     key: ${{ secrets.EC2_KEY }}
+      #     script_stop: true
+      #     script: |
+      #       sudo rm -rf /var/www/html/*
+      #       sudo mv /home/ubuntu/client/.next/* /var/www/html
+      #       sudo systemctl restart nginx
+      #       sudo rm -rf /home/ubuntu/client
+            
+      # EC2에 접속하여 애플리케이션 설치 및 동적 서버 실행 (PM2 사용)
+      - name: EC2에서 애플리케이션 설치 및 실행
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_KEY }}
-          script_stop: true
           script: |
-            sudo rm -rf /var/www/html/*
-            sudo mv /home/ubuntu/client/.next/* /var/www/html
-            sudo systemctl restart nginx
-            sudo rm -rf /home/ubuntu/client
-            
-     
-      
+            cd /home/ubuntu/client
+            # production 모드로 의존성 설치 (이미 빌드된 .next 폴더 사용)
+            npm install --production
+            # 빌드 완료 후, Next.js 동적 서버 실행 (PM2를 사용해 실행 중이면 재시작)
+            pm2 restart nextjs-app || pm2 start npm --name "nextjs-app" -- start
+  
 
 
        
