@@ -54,14 +54,14 @@ jobs:
           chmod -R +r ./.next             # 빌드 결과에 읽기 권한 부여
           ls ./.next                      # 빌드 디렉토리 내용 확인
 
-          - name: 파일 목록 확인
-          run: |
-            ls -al ./.next
-            ls -al package.json || echo "package.json 파일 없음"
-            ls -al package-lock.json || echo "package-lock.json 파일 없음"
-            ls -al next.config.js || echo "next.config.js 파일 없음"
-            ls -al public || echo "public 폴더 없음"
-            ls -al .env || echo ".env 파일 없음"
+      - name: 파일 목록 확인
+        run: |
+          ls -al ./.next
+          ls -al package.json || echo "package.json 파일 없음"
+          ls -al package-lock.json || echo "package-lock.json 파일 없음"
+          ls -al next.config.js || echo "next.config.js 파일 없음"
+          ls -al public || echo "public 폴더 없음"
+          ls -al .env || echo ".env 파일 없음"
         
       
 
