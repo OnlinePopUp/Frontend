@@ -175,7 +175,7 @@ const handleLikeCommentToggle = async (cmtId: number, liked: boolean) => {
           {/* ✅ 작성자 버튼 (email 파라미터 포함) */}
           <button
             className="text-xs text-blue-500 mt-4 hover:underline"
-            onClick={() => router.push(`http://localhost:3000/mypage?email=${post.board.email}`)}
+            onClick={() => router.push(`/mypage?email=${post.board.email}`)}
           >
             작성자: {post.boardNickname || "알 수 없음"}
           </button>
