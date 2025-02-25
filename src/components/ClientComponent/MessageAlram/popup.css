@@ -1,0 +1,54 @@
+/* 팝업창 스타일 */
+.chat-popup {
+    width: 300px;              /* 팝업 너비 */
+    height: 400px;             /* 팝업 높이 */
+    background-color: #fff;    /* 배경색 */
+    padding: 20px;             /* 내부 여백 */
+    border: 1px solid #ddd;    /* 테두리 */
+    border-radius: 8px;        /* 둥근 모서리 */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+    position: relative;
+    transform: translateY(20%); /* 상단에서 20% 아래로 이동 */
+  }
+  
+  /* 채팅 메시지 입력 영역 */
+  .chat-messageinput {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 15px; /* 메시지 기록과 입력창 사이 간격 */
+  }
+  
+  .chat-messageinput input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  
+  .chat-messageinput button {
+    padding: 8px 12px;
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .chat-messageinput button:hover {
+    background-color: #45a049;
+  }
+  
+  /* unreadCount 배지 스타일 */
+  .badge {
+    display: inline-block;
+    background-color: red;
+    color: #fff;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 12px;
+    margin-left: 5px;
+  }
+  

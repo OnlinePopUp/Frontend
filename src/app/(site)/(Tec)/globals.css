@@ -209,6 +209,17 @@ a {
   color: #af3333;
 }
 
+.navbar-message{
+  position: absolute;
+  top: 50%;
+  right: 15%;
+  transform: translate(0%, -40%);
+}
+
+.navbar-message:hover {
+  color: #af3333;
+}
+
 .navbar-user {
   position: absolute;
   top: 50%;

@@ -1,13 +1,11 @@
-"use client"
+"use client";
 
-// import Breadcrumb from "@/components/ClientComponent/Common/Breadcrumb";
 import Link from "next/link";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "@/utils/axiosConfig";  // ✅ 글로벌 설정된 axios 사용
 
 const Signin = () => {
-
   console.log("🚀 Global Axios Base URL:", axios.defaults.baseURL);
   const [formData, setFormData] = useState({
     email: "",
@@ -24,7 +22,7 @@ const Signin = () => {
     });
   };
 
-  //토큰 있을때
+  // 토큰 있을때
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -32,32 +30,28 @@ const Signin = () => {
     formDataToSend.append("email", formData.email);
     formDataToSend.append("password", formData.password);
 
-
     try {
-
       const response = await axios.post(
-          "/auth/login",
-          formDataToSend,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-            withCredentials: true  // 쿠키 및 인증 정보 포함
-          }
-        );
+        "/auth/login",
+        formDataToSend,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          withCredentials: true,  // 쿠키 및 인증 정보 포함
+        }
+      );
 
       // 서버 응답 전체 출력 (디버깅용)
       console.log("Full response:", response);
-
       // 1. 응답 본문(Body) 출력
       console.log("Response Body:", response.data);
 
       // 2. 서버 응답 헤더에서 AccessToken 추출 
       const accessToken = response.headers['access-token'];
-     
+      
       // 3. 응답 오는 전체 헤더 출력 (디버깅용)
       console.log("Response Headers:", response.headers);
-
       // 4. 추출한 AccessToken 출력
       console.log("AccessToken:", accessToken);
       
@@ -65,6 +59,10 @@ const Signin = () => {
         // 로컬 스토리지에 AccessToken 저장
         localStorage.setItem('accessToken', accessToken);
         localStorage.setItem("userEmail", formData.email); // 이메일 저장 추가
+
+        // response.data에 담긴 role 값을 로컬 스토리지에 저장
+        localStorage.setItem("role", response.data.role);
+
         alert("Login successful!");
 
         setFormData({
@@ -82,11 +80,9 @@ const Signin = () => {
       alert("Login failed. Please try again.");
     }
   };
-  
 
   return (
     <>
-      {/* <Breadcrumb title={"Signin"} pages={["Signin"]} /> */}
       <section className="overflow-hidden py-20 bg-gray-2">
         <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
           <div className="max-w-[570px] w-full mx-auto rounded-xl bg-white shadow-1 p-4 sm:p-7.5 xl:p-11">
@@ -104,7 +100,7 @@ const Signin = () => {
                     Email
                   </label>
                   <input
-                    type="text"  // ✅ type="email" → type="text"
+                    type="text" 
                     name="email"
                     id="email"
                     placeholder="Enter your email"
@@ -136,7 +132,6 @@ const Signin = () => {
                 >
                   Sign in to account
                 </button>
-
 
                 <span className="relative z-1 block font-medium text-center mt-4.5">
                   <span className="block absolute -z-1 left-0 top-1/2 h-px w-full bg-gray-3"></span>

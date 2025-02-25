@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect , useCallback  } from "react";
 import axios from "@/utils/axiosConfig";
 import { useRouter } from "next/navigation";
 
@@ -16,17 +16,21 @@ const Posted = () => {
 
   const userEmail = typeof window !== "undefined" ? localStorage.getItem("userEmail") : null;
 
-  const fetchPosts = async () => {
+  const fetchPosts = useCallback(async () => {
     try {
       let updatedPosts: any[][] = [];
       let updatedNicknames: string[][] = [];
-      let validPages = [];
+      let validPages: number[] = [];
 
       for (let i = 0; i < 10; i++) {
         console.log(`🔹 서버에 GET 요청: /post/all?size=${pageSize}&page=${i}`);
         const response = await axios.get(`/post/all?size=${pageSize}&page=${i}`);
 
-        if (response.data && Array.isArray(response.data.board) && response.data.board.length > 0) {
+        if (
+          response.data &&
+          Array.isArray(response.data.board) &&
+          response.data.board.length > 0
+        ) {
           updatedPosts.push(response.data.board);
           updatedNicknames.push(response.data.nickname || []);
           validPages.push(i);
@@ -35,18 +39,19 @@ const Posted = () => {
 
       setPosts(updatedPosts);
       setNicknames(updatedNicknames);
-      setTotalPages(validPages.length); // ✅ 실제 데이터가 있는 페이지 개수만 반영
+      setTotalPages(validPages.length);
       setCurrentPage(0);
     } catch (error: any) {
       console.error("🚨 게시글 가져오기 실패:", error.response?.data || error.message);
     }
-  };
+  }, [pageSize]);
 
   useEffect(() => {
     if (!isSearching) {
       fetchPosts();
     }
-  }, [isSearching,fetchPosts]);
+  }, [isSearching, fetchPosts]);
+
 
   // ✅ 검색 요청
   const handleSearch = async () => {
