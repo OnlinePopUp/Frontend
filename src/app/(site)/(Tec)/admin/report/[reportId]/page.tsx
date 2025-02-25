@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useRouter } from "next/router";
+import { useSearchParams } from "next/navigation";
 
 interface Report {
     reportId: number;
@@ -12,14 +12,13 @@ interface Report {
     isCheck: number;
 }
 
-export default function EachReport() {
+export default function EachReport({ params }) {
     const [report, setReport] = useState<Report | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [placeholder, setPlaceholder] = useState("오늘 끌리는 팝업은?"); // 초기 placeholder 설정
 
-    const router = useRouter();
-    const { id } = router.query;
+    const id = params.reportId;
 
     useEffect(() => {
         // 클라이언트에서만 실행되도록 설정
@@ -41,11 +40,12 @@ export default function EachReport() {
 
                 const response = await api.get(`/admin/report/${id}`, {
                     headers: {
-                        Authorization: `Bearer ${token}`,
+                        Authorization: `${token}`,
                     },
                 });
 
                 setReport(response.data);
+                alert(response.data);
             } catch (error) {
                 console.error("데이터 로딩 중 오류 발생:", error);
                 setError("데이터를 불러오는 중 오류가 발생했습니다.");
