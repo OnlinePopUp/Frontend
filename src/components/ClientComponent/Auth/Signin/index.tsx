@@ -70,6 +70,9 @@ const Signin = () => {
           password: "",
         });
 
+        // ✅ 새로운 상태 트리거
+        window.dispatchEvent(new Event("storage")); // "storage" 이벤트 발생  
+
         router.push("/");
       } else {
         throw new Error("AccessToken not received");

@@ -118,7 +118,7 @@ const FollowsSectionList = () => {
 
       {/* ✅ Follow, Follower, PostWritten 탭 버튼 추가 */}
       <div className="flex justify-center gap-4 mb-6">
-        {/* ✅ 관리자만 보이는 버튼 */}
+        {/* ✅ 관리자만 보이는 버튼
         {isAdmin && (
           <button
             className={`px-4 py-2 rounded-lg ${selectedTab === "follow" ? "bg-green-light-2 text-black" : "bg-green-light-4 text-black"}`}
@@ -126,7 +126,7 @@ const FollowsSectionList = () => {
           >
             전체 유저(관리자전용) ({followingCount})
           </button>
-        )}
+        )} */}
 
         <button
           className={`px-4 py-2 rounded-lg ${selectedTab === "follow" ? "bg-green-light-2 text-black" : "bg-green-light-4 text-black"}`}

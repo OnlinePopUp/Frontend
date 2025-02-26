@@ -12,9 +12,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             {/* 헤더 */}
             <TecLayout> 
               <FooterLayout>
-                <AlramLayout>          
+                {/* <AlramLayout>           */}
                 {children}
-                </AlramLayout>
+                {/* </AlramLayout> */}
               </FooterLayout>
             </TecLayout>
         </RootLayout>

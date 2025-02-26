@@ -8,10 +8,10 @@ import "./popup.css";
 
 // form-data 형식의 메시지를 객체로 변환하는 함수 (예: "송신자 : test@3 메세지 : ㅇㅇ")
 const parseFormDataMessage = (str: string) => {
-  const regex = /송신자\s*:\s*(.*?)\s*메세지\s*:\s*(.*)/;
+  const regex = /송신자\s*:\s*(\S+)\s+메세지\s*:\s*(.+)/;
   const match = str.match(regex);
-  if (match) {
-    return { sEmail: match[1], content: match[2] };
+  if (match && match[1]) {
+    return { sEmail: match[1].trim(), content: match[2].trim() };
   }
   return { sEmail: "알 수 없음", content: str };
 };
@@ -47,7 +47,7 @@ const MessageAlram = () => {
       webSocketFactory: () => socket,
       reconnectDelay: 5000,
       onConnect: () => {
-        console.log("✅ WebSocket 연결 성공!");
+        console.log("✅ WebSocket 연결 성공!");   
         stompClient.current?.subscribe(`/chat/sub/${userEmail}`, (response) => {
           let chatMessage;
           try {
@@ -55,27 +55,23 @@ const MessageAlram = () => {
           } catch (error) {
             console.warn("JSON 파싱 실패, form-data 형식으로 처리:", response.body);
             chatMessage = parseFormDataMessage(response.body);
+            console.log("chatMessage.sEmail",chatMessage.sEmail,"chatMessage.content",chatMessage.content)
           }
-          // 기본 값 설정 (필요시)
-          if (!chatMessage.sEmail) {
-            chatMessage.sEmail = "알 수 없음";
+        
+          // JSON 메시지라면 바로 사용, form-data라면 파싱 결과 사용
+          if (!chatMessage.sEmail || chatMessage.sEmail === "알 수 없음") {
+            console.warn("🚨 송신자 정보가 없음! 원본 데이터:", response.body);
           }
-          if (!chatMessage.content) {
-            chatMessage.content = response.body;
-          }
-          // 자신이 보낸 메시지가 아니라면 unreadCount 증가 및 로그 출력
+        
           if (chatMessage.sEmail !== userEmail) {
             setUnreadCount((prev) => prev + 1);
-            // chatMessage.content를 파싱해서 송신자와 메시지 내용만 추출
-            const parsed = parseFormDataMessage(chatMessage.content);
-            console.log(
-              `새 메시지 도착 - 송신자: ${parsed.sEmail}, 메시지: ${parsed.content}`
-            );
-            
-            setTargetEmail(parsed.sEmail); // ✅ targetEmail 변경 가능하게 수정
+            console.log(`새 메시지 도착 - 송신자: ${chatMessage.sEmail}, 메시지: ${chatMessage.content}`);
+            setTargetEmail(chatMessage.sEmail);
           }
+        
           setMessages((prevMessages) => [...prevMessages, chatMessage]);
-        });
+        });        
+
       },
     });
 

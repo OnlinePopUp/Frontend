@@ -7,7 +7,6 @@ import Searchform from "./searchform";
 import logo from "/public/logo.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faCartShopping } from "@fortawesome/free-solid-svg-icons";
-import MessageAlram from "@/components/ClientComponent/Alram/MessageAlram/MessageAlram";
 
 export default function Navbar() {
     const [showCategoryMenu, setShowCategoryMenu] = useState(false);
@@ -44,11 +43,6 @@ export default function Navbar() {
             
             {/* <div>
                 <Searchform/>
-            </div> */}
-
-
-            {/* <div className="navbar-message">
-                <MessageAlram />
             </div> */}
             
 

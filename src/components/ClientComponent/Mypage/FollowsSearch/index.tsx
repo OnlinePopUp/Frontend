@@ -1,11 +1,13 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import axios from "@/utils/axiosConfig";
+import { useRouter } from "next/navigation";
 
 const FollowSection = () => {
   const [email, setEmail] = useState(""); // 입력된 이메일
   const [loading, setLoading] = useState(false); // 로딩 상태
   const [isAdmin, setIsAdmin] = useState(false); // ✅ ROLE_ADMIN 여부 확인
+  const router = useRouter();
 
   // ✅ 컴포넌트가 마운트될 때 role 값 가져오기
   useEffect(() => {
@@ -94,11 +96,17 @@ const FollowSection = () => {
       {/* ✅ ROLE_ADMIN인 경우에만 보이도록 조건부 렌더링 */}
       {isAdmin && (
         <div>
-          <button className="px-4 py-2 bg-gray hover:bg-red text-black rounded-lg mr-2"> 
+          <button
+            className="px-4 py-2 bg-gray hover:bg-red text-black rounded-lg mr-2"
+            onClick={() => router.push("/admin/join")} // ✅ 버튼 클릭 시 이동
+          >
             계정등록
           </button>
-          
-          <button className="px-4 py-2 bg-gray hover:bg-red text-black rounded-lg">
+                 
+          <button
+            className="px-4 py-2 bg-gray hover:bg-red text-black rounded-lg mr-2"
+            onClick={() => router.push("/admin/report/all ")} // ✅ 버튼 클릭 시 이동
+          >
             신고내역
           </button>
 
