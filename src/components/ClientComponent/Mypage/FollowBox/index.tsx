@@ -6,6 +6,17 @@ import { useSearchParams } from "next/navigation";
 import { Client } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 
+
+// ✅ form-data 형식의 메시지를 객체로 변환하는 함수
+const parseFormDataMessage = (str: string) => {
+  const regex = /송신자\s*:\s*(\S+)\s+메세지\s*:\s*(.+)/;
+  const match = str.match(regex);
+  if (match && match[1]) {
+    return { sEmail: match[1].trim(), content: match[2].trim() };
+  }
+  return { sEmail: "알 수 없음", content: str };
+};
+
 const FollowBox = () => {
   const searchParams = useSearchParams();
   const urlEmail = searchParams.get("email");
@@ -203,11 +214,28 @@ const FollowBox = () => {
         webSocketFactory: () => socket,
         reconnectDelay: 5000,
         onConnect: () => {
-          console.log("✅ WebSocket 연결 성공!");
+          console.log("✅ WebSocket 연결 성공!!!!!!!!!!!!");
+          
+
           stompClient.current?.subscribe(`/chat/sub/${userEmail}`, (response) => {
-            const chatMessage = JSON.parse(response.body);
-            setMessages((prevMessages) => [...prevMessages, chatMessage]);
+            console.log("구독완료");
+            console.log("response!!!!!",response)
+            console.log("📩 [수신] 메시지 도착 (원본):", response.body);
+  
+            try {
+              // ✅ form-data 형식 파싱
+              const chatMessage = parseFormDataMessage(response.body);
+  
+              console.log("✅ [파싱된 메시지]:", chatMessage);
+  
+              // ✅ 메시지 리스트 업데이트
+              setMessages((prevMessages) => [...prevMessages, chatMessage]);
+            } catch (error) {
+              console.error("🚨 [파싱 오류] 메시지 처리 실패!", error, response.body);
+            }
           });
+
+
         },
       });
   

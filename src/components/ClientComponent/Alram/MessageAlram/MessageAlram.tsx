@@ -1,12 +1,11 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import axios from "@/utils/axiosConfig";
-import { useSearchParams } from "next/navigation";
 import { Client } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 import "./popup.css";
 
-// form-data 형식의 메시지를 객체로 변환하는 함수 (예: "송신자 : test@3 메세지 : ㅇㅇ")
+// ✅ form-data 형식의 메시지를 객체로 변환하는 함수
 const parseFormDataMessage = (str: string) => {
   const regex = /송신자\s*:\s*(\S+)\s+메세지\s*:\s*(.+)/;
   const match = str.match(regex);
@@ -17,29 +16,23 @@ const parseFormDataMessage = (str: string) => {
 };
 
 const MessageAlram = () => {
-
-  // 초기값 , targetEmail
-  const initialTargetEmail = null;
-  const [targetEmail, setTargetEmail] = useState(initialTargetEmail);
-
-  // 현재 로그인한 사용자의 이메일은 localStorage에서 가져옴
   const userEmail = localStorage.getItem("userEmail");
-
-  // 채팅 관련 상태 관리
-  
   const [messages, setMessages] = useState<any[]>([]);
   const [message, setMessage] = useState("");
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  // 읽지 않은(새) 메시지 수
-  const [unreadCount, setUnreadCount] = useState(0);
 
-  // WebSocket(STOMP) 클라이언트 참조
+  // ✅ 받은 메시지 목록을 접었다/펼치는 상태
+  const [isUnreadListOpen, setIsUnreadListOpen] = useState(false);
+
+  // ✅ 새 메시지 보낸 사람 목록을 저장하는 상태
+  const [unreadList, setUnreadList] = useState<{ sender: string; count: number }[]>([]);
+  
   const stompClient = useRef<Client | null>(null);
 
-  // 1. WebSocket 연결 및 구독 설정
+  // ✅ WebSocket 연결 및 구독 설정
   useEffect(() => {
-    if (!userEmail) return; // targetEmail 없이도 연결
+    if (!userEmail) return;
 
     const socket = new SockJS("http://13.213.242.176:8081/chat/ws");
 
@@ -47,7 +40,8 @@ const MessageAlram = () => {
       webSocketFactory: () => socket,
       reconnectDelay: 5000,
       onConnect: () => {
-        console.log("✅ WebSocket 연결 성공!");   
+        console.log("✅ WebSocket 연결 성공!");
+
         stompClient.current?.subscribe(`/chat/sub/${userEmail}`, (response) => {
           let chatMessage;
           try {
@@ -55,23 +49,29 @@ const MessageAlram = () => {
           } catch (error) {
             console.warn("JSON 파싱 실패, form-data 형식으로 처리:", response.body);
             chatMessage = parseFormDataMessage(response.body);
-            console.log("chatMessage.sEmail",chatMessage.sEmail,"chatMessage.content",chatMessage.content)
           }
-        
-          // JSON 메시지라면 바로 사용, form-data라면 파싱 결과 사용
+
           if (!chatMessage.sEmail || chatMessage.sEmail === "알 수 없음") {
             console.warn("🚨 송신자 정보가 없음! 원본 데이터:", response.body);
+            return;
           }
-        
-          if (chatMessage.sEmail !== userEmail) {
-            setUnreadCount((prev) => prev + 1);
-            console.log(`새 메시지 도착 - 송신자: ${chatMessage.sEmail}, 메시지: ${chatMessage.content}`);
-            setTargetEmail(chatMessage.sEmail);
-          }
-        
-          setMessages((prevMessages) => [...prevMessages, chatMessage]);
-        });        
 
+          console.log(`📩 새 메시지 도착 - 송신자: ${chatMessage.sEmail}, 메시지: ${chatMessage.content}`);
+
+          // ✅ 메시지 보낸 사람을 unreadList에 추가 (같은 사람이라면 count 증가)
+          setUnreadList((prevList) => {
+            const existingSender = prevList.find((item) => item.sender === chatMessage.sEmail);
+            if (existingSender) {
+              return prevList.map((item) =>
+                item.sender === chatMessage.sEmail ? { ...item, count: item.count + 1 } : item
+              );
+            } else {
+              return [...prevList, { sender: chatMessage.sEmail, count: 1 }];
+            }
+          });
+
+          setMessages((prevMessages) => [...prevMessages, chatMessage]);
+        });
       },
     });
 
@@ -80,68 +80,77 @@ const MessageAlram = () => {
     return () => {
       stompClient.current?.deactivate();
     };
-  }, [userEmail, targetEmail]);
+  }, [userEmail]);
 
-  // 2. 서버에서 채팅 기록 불러오기 (targetEmail이 있을 때만)
-  const fetchChatHistory = async () => {
-    if (!userEmail || !targetEmail) return;
+  // ✅ 특정 상대의 채팅창 열기
+  const handleOpenChat = async (sender: string) => {
     setLoading(true);
     try {
-      console.log("📥 채팅 기록 불러오기...");
-      const response = await axios.get(
-        `/chat/history?sEmail=${userEmail}&rEmail=${targetEmail}`
-      );
-      if (response.data) {
-        setMessages(response.data);
-      }
+      console.log(`📥 ${sender}와의 채팅 기록 불러오기...`);
+      const response = await axios.get(`/chat/history?sEmail=${userEmail}&rEmail=${sender}`);
+      setMessages(response.data);
+      
+      // ✅ 채팅을 열면 해당 발신자의 안 읽은 메시지 개수를 삭제
+      setUnreadList((prevList) => prevList.filter((item) => item.sender !== sender));
     } catch (error) {
       console.error("🚨 채팅 기록 불러오기 실패:", error);
     } finally {
       setLoading(false);
+      setIsChatOpen(true);
     }
   };
 
-  // 3. 채팅창 열기: 채팅 기록 불러온 후 unreadCount 초기화
-  const handleOpenChat = async () => {
-    if (!userEmail) {
-      alert("로그인이 필요합니다.");
-      return;
-    }
-    await fetchChatHistory();
-    setUnreadCount(0);
-    setIsChatOpen(true);
-  };
-
-  // 4. 메시지 전송
+  // ✅ 메시지 전송
   const sendMessage = () => {
-    if (!stompClient.current || !message.trim() || !targetEmail) return;
-    // sender 변수를 선언하여 송신자 이메일을 저장
-    const sender = userEmail;
+    if (!stompClient.current || !message.trim()) return;
+
     const chatMessage = {
-      sEmail: sender,
-      rEmail: targetEmail,
+      sEmail: userEmail,
+      rEmail: messages.length > 0 ? messages[0].sEmail : "",
       content: message,
     };
+
     stompClient.current.publish({
       destination: "/chat/pub/send",
       body: JSON.stringify(chatMessage),
     });
+
     setMessages((prevMessages) => [...prevMessages, chatMessage]);
     setMessage("");
   };
 
   return (
     <div>
-      {/* 채팅창 열기 버튼에 unreadCount 배지를 표시 */}
-      <button onClick={handleOpenChat}>
-        채팅 열기 {unreadCount > 0 && <span className="badge">{unreadCount}</span>}
+      {/* ✅ 받은 메시지 목록 버튼 */}
+      <button onClick={() => setIsUnreadListOpen((prev) => !prev)}>
+        📩 받은 메시지 목록 {unreadList.length > 0 && "💡💡💡"}
       </button>
 
+      {/* ✅ 받은 메시지 리스트 (접었다/펼쳤다 가능) */}
+      {isUnreadListOpen && (
+        <div>
+          {unreadList.length === 0 ? (
+            <p>새 메시지가 없습니다.</p>
+          ) : (
+            <ul>
+              {unreadList.map((item) => (
+                <li key={item.sender}>
+                  <button onClick={() => handleOpenChat(item.sender)}>
+                    {item.sender}님 ({item.count}개)
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
+
+      {/* ✅ 채팅창 */}
       {isChatOpen && (
         <div className="fixed inset-0 flex items-start justify-center bg-black bg-opacity-50 z-50">
           <div className="chat-popup">
             <h2 className="text-xl font-semibold text-gray-800 mb-4">
-              {targetEmail ? `${targetEmail}님과의 채팅` : "전체 채팅"}
+              채팅창
             </h2>
 
             {/* 채팅 기록 영역 */}
