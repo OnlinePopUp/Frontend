@@ -8,7 +8,7 @@ export default function AdminPage() {
   const navigateTo = (path: string) => {
     router.push(`/admin/${path}`);
   };
-
+// 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100 p-6">
       <div className="bg-gray shadow-lg rounded-xl p-8 max-w-lg w-full">
