@@ -1,6 +1,8 @@
 import RootLayout from './RootLayout/layout';
-import ServerLayout from './ServerLayout/layout';
+// ✅ 서버 컴포넌트 (AlramLayout 포함)
+import AlramLayout from "./Alram/layout";
 import TecLayout from './(site)/(Tec)/layout'; // (Tec) 폴더에서 import
+import FooterLayout from "@/app/Footer/layout";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -9,7 +11,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <RootLayout>
             {/* 헤더 */}
             <TecLayout> 
-               {children}
+              <FooterLayout>
+                <AlramLayout>          
+                {children}
+                </AlramLayout>
+              </FooterLayout>
             </TecLayout>
         </RootLayout>
       </body>

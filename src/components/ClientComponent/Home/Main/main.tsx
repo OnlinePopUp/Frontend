@@ -78,9 +78,9 @@ const Main: React.FC = () => {
         </div>
       ))}
 
-      <footer className="bg-dark text-white py-6 text-center">
+      {/* <footer className="bg-dark text-white py-6 text-center">
         <p>© 2025 Popup Store. All rights reserved.</p>
-      </footer>
+      </footer> */}
     </div>
   );
 };

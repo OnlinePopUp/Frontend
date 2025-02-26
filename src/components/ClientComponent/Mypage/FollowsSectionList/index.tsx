@@ -12,6 +12,7 @@ const FollowsSectionList = () => {
   const urlEmail = searchParams.get("email");
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false); // ✅ ROLE_ADMIN 여부 확인
   const [followingNicknames, setFollowingNicknames] = useState<string[]>([]);
   const [followingEmails, setFollowingEmails] = useState<string[]>([]);
   const [followingCount, setFollowingCount] = useState(0);
@@ -25,7 +26,8 @@ const FollowsSectionList = () => {
   useEffect(() => {
     setUserEmail(localStorage.getItem("userEmail"));
     setAccessToken(localStorage.getItem("accessToken"));
-  }, [userEmail, accessToken]); // ✅ 의존성 배열에 추가하여 값 변경 시 실행
+    setIsAdmin(localStorage.getItem("role") === "ROLE_ADMIN"); // ✅ 관리자 여부 확인
+  }, [userEmail, accessToken,setIsAdmin]); // ✅ 의존성 배열에 추가하여 값 변경 시 실행
   
 
   // ✅ 서버에서 특정 email의 팔로우 & 팔로워 목록 가져오기
@@ -116,6 +118,16 @@ const FollowsSectionList = () => {
 
       {/* ✅ Follow, Follower, PostWritten 탭 버튼 추가 */}
       <div className="flex justify-center gap-4 mb-6">
+        {/* ✅ 관리자만 보이는 버튼 */}
+        {isAdmin && (
+          <button
+            className={`px-4 py-2 rounded-lg ${selectedTab === "follow" ? "bg-green-light-2 text-black" : "bg-green-light-4 text-black"}`}
+            onClick={() => setSelectedTab("follow")}
+          >
+            전체 유저(관리자전용) ({followingCount})
+          </button>
+        )}
+
         <button
           className={`px-4 py-2 rounded-lg ${selectedTab === "follow" ? "bg-green-light-2 text-black" : "bg-green-light-4 text-black"}`}
           onClick={() => setSelectedTab("follow")}

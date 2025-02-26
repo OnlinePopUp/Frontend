@@ -17,14 +17,16 @@ const parseFormDataMessage = (str: string) => {
 };
 
 const MessageAlram = () => {
-  // URL의 쿼리 파라미터에서 대상 이메일(채팅 상대방)을 가져옴 (옵션)
-  const searchParams = useSearchParams();
-  const targetEmail = searchParams.get("email");
+
+  // 초기값 , targetEmail
+  const initialTargetEmail = null;
+  const [targetEmail, setTargetEmail] = useState(initialTargetEmail);
 
   // 현재 로그인한 사용자의 이메일은 localStorage에서 가져옴
   const userEmail = localStorage.getItem("userEmail");
 
   // 채팅 관련 상태 관리
+  
   const [messages, setMessages] = useState<any[]>([]);
   const [message, setMessage] = useState("");
   const [isChatOpen, setIsChatOpen] = useState(false);
@@ -69,6 +71,8 @@ const MessageAlram = () => {
             console.log(
               `새 메시지 도착 - 송신자: ${parsed.sEmail}, 메시지: ${parsed.content}`
             );
+            
+            setTargetEmail(parsed.sEmail); // ✅ targetEmail 변경 가능하게 수정
           }
           setMessages((prevMessages) => [...prevMessages, chatMessage]);
         });

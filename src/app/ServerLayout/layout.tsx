@@ -3,6 +3,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import type { Metadata } from "next";
 import Topbar from "@/components/ServerComponent/Topbar";  // 서버 전용 Topbar
+// import Message from "@/components/ClientComponent/MessageAlram/MessageAlram"
 
 // 폰트 설정
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
@@ -17,7 +18,8 @@ export const metadata: Metadata = {
 export default function ServerLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-      <Topbar />
+      {/* <Message/> */}
+      {/* <Topbar /> */}
       {children}
     </div>
   );

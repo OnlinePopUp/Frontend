@@ -1,10 +1,19 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "@/utils/axiosConfig";
 
 const FollowSection = () => {
   const [email, setEmail] = useState(""); // 입력된 이메일
   const [loading, setLoading] = useState(false); // 로딩 상태
+  const [isAdmin, setIsAdmin] = useState(false); // ✅ ROLE_ADMIN 여부 확인
+
+  // ✅ 컴포넌트가 마운트될 때 role 값 가져오기
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const role = localStorage.getItem("role");
+      setIsAdmin(role === "ROLE_ADMIN");
+    }
+  }, []);
 
   // 이메일 입력 핸들러
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,10 +45,9 @@ const FollowSection = () => {
         formDataToSend, //  FormData 전송
         {
           headers: {
-            Authorization: accessToken ,
+            Authorization: accessToken,
             "Content-Type": "multipart/form-data",
-          }
-          ,
+          },
         }
       );
 
@@ -47,16 +55,15 @@ const FollowSection = () => {
         const message =
           response.data && typeof response.data === "object"
             ? response.data.message
-            : "팔로우 요청 성공! ";
+            : "팔로우 요청 성공!";
       
         alert(message);
       
         setEmail(""); // 입력 필드 초기화
         window.location.reload(); // 페이지 새로고침
       }
-      
     } catch (error: any) {
-      //alert(error.response?.data?.error || "팔로우 요청 실패");
+      console.error("🚨 팔로우 요청 실패:", error);
     } finally {
       setLoading(false);
     }
@@ -84,7 +91,19 @@ const FollowSection = () => {
         </button>
       </div>
 
-    
+      {/* ✅ ROLE_ADMIN인 경우에만 보이도록 조건부 렌더링 */}
+      {isAdmin && (
+        <div>
+          <button className="px-4 py-2 bg-gray hover:bg-red text-black rounded-lg mr-2"> 
+            계정등록
+          </button>
+          
+          <button className="px-4 py-2 bg-gray hover:bg-red text-black rounded-lg">
+            신고내역
+          </button>
+
+        </div>
+      )}
     </section>
   );
 };
