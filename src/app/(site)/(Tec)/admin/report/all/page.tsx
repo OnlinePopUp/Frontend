@@ -1,39 +1,62 @@
 'use client'
 
-    import React, { useState, useEffect } from 'react';
-    import { useRouter } from "next/navigation";
-    import axios from "axios";
-    import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid';
-    import "./../../../globals.css";
-    import "./admin.css";
+import React, { useState, useEffect } from 'react';
+import { useRouter } from "next/navigation";
+import axios from "axios";
+import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid';
+import "./../../../globals.css";
+import "./admin.css";
 
-    interface Report {
-        reportId: number,
-        email: string,
-        reported: string,
-        reason: string,
-        isCheck: number
-    };
+interface Report {
+    reportId: number,
+    email: string,
+    reported: string,
+    reason: string,
+    isCheck: number
+};
     
-    export default function AdminUserList() {
-        const columns: GridColDef[] = [
-            { field: 'reportId', headerName: '신고번호', width: 110, resizable: false, },
-            { field: 'content', headerName: '신고 내용', width: 300, resizable: false, },
-            { field: 'email', headerName: '신고자', width: 250, resizable: false,},
-            { field: 'rpEmail', headerName: '신고 대상', width: 250, resizable: false, },
-            { field: 'isCheck', headerName: '관리자 확인 유무', width: 150, resizable: false, },
-            { field: 'check', headerName: '내용 확인', width: 100, renderCell: (params) => {
-                return <button className="withDrawBtn" onClick={() => checkReport(params.row.reportId)}>확인</button>;
-                }
-            },
-        ];
+export default function AdminUserList() {
+    const columns: GridColDef[] = [
+        { field: 'reportId', headerName: '신고번호', width: 110, resizable: false, },
+        { field: 'content', headerName: '신고 내용', width: 300, resizable: false, },
+        { field: 'email', headerName: '신고자', width: 250, resizable: false,},
+        { field: 'rpEmail', headerName: '신고 대상', width: 250, resizable: false, },
+        { field: 'isCheck', headerName: '관리자 확인 유무', width: 150, resizable: false, },
+        { field: 'check', headerName: '내용 확인', width: 100, renderCell: (params) => {
+            return <button className="withDrawBtn" onClick={() => checkReport(params.row.reportId)}>확인</button>;
+            }
+        },
+    ];
 
-        const [reports, setReports] = useState<Report[]>([]);
-        const [loading, setLoading] = useState(true);
-        const [error, setError] = useState(null);
-        const router = useRouter();
+    const [reports, setReports] = useState<Report[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
+    const [accessToken, setAccessToken] = useState<string | null>(null);
+    const router = useRouter();
+    
+    useEffect(() => {
+        const role = localStorage.getItem("role");
+        const token = localStorage.getItem("accessToken");
 
-        const checkReport = (reportId: number) => router.push(`/admin/report/${reportId}`);
+        if (role !== "ROLE_ADMIN") {
+            alert('해당 페이지의 접속 권한이 없습니다.');
+            router.push("http://47.130.76.132:8080/");
+        } else {
+            setIsAdmin(true);
+        }
+
+        if (token) {
+            setAccessToken(token);
+        }
+    }, [router]);
+
+    // if (isAdmin != "ROLE_ADMIN") {
+    //     alert('해당 페이지의 접속 권한이 없습니다.');
+    //     router.push("http://47.130.76.132:8080/");
+    // }
+
+    const checkReport = (reportId: number) => router.push(`/admin/report/${reportId}`);
 
     useEffect(() => {
         try {

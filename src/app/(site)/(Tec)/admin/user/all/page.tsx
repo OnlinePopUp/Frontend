@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid';
+import { useRouter } from "next/navigation";
 import { Button } from '@mui/material';
 import "./../../../globals.css";
 import "./adminUser.css";
@@ -17,11 +18,44 @@ interface User {
 }
 
 export default function AdminUserList() {
+
     const [users, setUsers] = useState<User[]>([]);
+    const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
+    const [accessToken, setAccessToken] = useState<string | null>(null);
     const api = axios.create({
         baseURL: "http://47.130.76.132:8080",
         withCredentials: true,
     });
+    const router = useRouter();
+
+    useEffect(() => {
+        const role = localStorage.getItem("role");
+        const token = localStorage.getItem("accessToken");
+
+        if (role !== "ROLE_ADMIN") {
+            alert('해당 페이지의 접속 권한이 없습니다.');
+            router.push("http://47.130.76.132:8080/");
+        } else {
+            setIsAdmin(true);
+        }
+
+        if (token) {
+            setAccessToken(token);
+        }
+    }, [router]);
+
+    // const [users, setUsers] = useState<User[]>([]);
+    // const api = axios.create({
+    //     baseURL: "http://47.130.76.132:8080",
+    //     withCredentials: true,
+    // });
+    // const router = useRouter();
+    // const isAdmin = localStorage.getItem("role");
+    
+    // if (isAdmin != "admin") {
+    //     alert('해당 페이지의 접속 권한이 없습니다.');
+    //     router.push("http://47.130.76.132:8080/");
+    // }
 
 
     useEffect(() => {

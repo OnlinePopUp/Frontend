@@ -7,6 +7,26 @@ import axios from 'axios';
 import "./../../globals.css";
 
 export default function Adminpage() {
+    const router = useRouter();
+    // const isAdmin = localStorage.getItem("role");
+    const [isAdmin, setIsAdmin] = useState<boolean | null>(null); // 초기값 null
+
+    useEffect(() => {
+        const role = localStorage.getItem("role");
+        if (role !== "ROLE_ADMIN") {
+            alert('해당 페이지의 접속 권한이 없습니다.');
+            router.push("http://47.130.76.132:8080/");
+        } else {
+            setIsAdmin(true); // 권한 확인 후 상태 업데이트
+        }
+    }, [router]);
+
+
+    // if (isAdmin != "ROLE_ADMIN") {
+    //     alert('해당 페이지의 접속 권한이 없습니다.');
+    //     router.push("http://47.130.76.132:8080/");
+    // }
+    
     const [formData, setFormData] = useState({
         email: "",
         password: "",
@@ -17,8 +37,6 @@ export default function Adminpage() {
         retypePassword: "",
         role: ""
     });
-    
-    const router = useRouter();
     
     const handleChange = (e: any) => {
         const { name, value } = e.target;

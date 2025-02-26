@@ -2,13 +2,13 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import "./../popup.css";
-import ucl from "/public/ucl.jpg";
+import noImage from '/public/noImage.png';
 
 interface Popup {
     popId: number;
@@ -23,9 +23,6 @@ interface Popup {
     image: string;
 }
 
-
-
-
 export default function Popuplist() {
     const [popups, setPopups] = useState<Popup[]>([]);
     const [loading, setLoading] = useState(true);
@@ -38,22 +35,43 @@ export default function Popuplist() {
     const handleMouseLeave = (id: number) => setMouseOn({[id]: false});
     const handlePopupClick = (id: number) => router.push(`/popup/${id}`);
 
-    const fetchPopups = (category: string) => {
+    const sortPopups = (popups: Popup[], sortType: string) => {
+        return [...popups].sort((a, b) => {
+            switch (sortType) {
+                case 'date':
+                    return new Date(b.start).getTime() - new Date(a.start).getTime();
+                case 'expiration':
+                    return new Date(a.exp).getTime() - new Date(b.exp).getTime();
+                case 'name':
+                    return a.title.localeCompare(b.title);
+                default:
+                    return 0;
+            }
+        });
+    };
+
+    const fetchPopups = useCallback(() => {
         setLoading(true);
-        axios.get(`http://47.130.76.132:8080/popup/all?category=${category}&page=0&size=100`)
+        axios.get(`http://47.130.76.132:8080/popup/all?category=전체&page=0&size=100`)
             .then(response => {
-                setPopups(response.data);
+                const sortedPopups = sortPopups(response.data, activeTag);
+                setPopups(sortedPopups);
                 setLoading(false);
             })
             .catch(error => {
                 setError(error);
                 setLoading(false);
             });
-    };
+    }, [activeTag]);
 
     useEffect(() => {
-        fetchPopups('등록일순');
-    }, []);
+        fetchPopups();
+    }, [fetchPopups]);
+
+    const handleClick = (tag) => {
+        setActiveTag(tag);
+        setPopups(prevPopups => sortPopups(prevPopups, tag));
+    };
 
     const [headerHeight, setHeaderHeight] = useState(0);
 
@@ -66,37 +84,6 @@ export default function Popuplist() {
     useEffect(() => {
         setCurrentTime(Date.now());
     }, []);
-
-    /*useEffect(() => {
-        axios.get(`http://47.130.76.132:8080/popup/all?category=등록일순&page=0&size=100`)
-        .then(response => {
-            setPopups(response.data);
-            setLoading(false);
-        })
-        .catch(error => {
-            setError(error);
-            setLoading(false);
-        });
-    }, []);*/
-
-    const handleClick = (tag) => {
-        setActiveTag(tag);
-        let category;
-        switch(tag) {
-          case 'date':
-            category = '등록일순';
-            break;
-          case 'expiration':
-            category = '마감일순';
-            break;
-          case 'name':
-            category = '이름순';
-            break;
-          default:
-            category = '등록일순';
-        }
-        fetchPopups(category);
-      };
 
     return (
         <div className="popupList" style={{ height: 'calc(100vh - [헤더높이]px)', overflowY: 'auto' }}>
@@ -125,16 +112,22 @@ export default function Popuplist() {
                                 onMouseLeave={() => handleMouseLeave(popup.popId)}
                                 onClick={() => handlePopupClick(popup.popId)}
                             >
-                                <div className="relative overflow-hidden min-h-[403px] w-20%">
+                                <div className="relative overflow-hidden h-[100%] w-20%">
                                     <div className="popupItem">
-                                    {popup.image ? (
-                                        <Image className="cardImage" src={popup.image} alt={popup.title} width={100} height={50}/>
-                                    ) : (
-                                        <div className="cardImagePlaceholder">이미지 없음</div>
-                                    )}
-                                        <p className="mt-3 ml-3 text-4xl truncate">{popup.title}</p>
-                                        <h2 className="mt-1 ml-3 text-lg truncate">{popup.email}</h2>
-                                        <h4 className="mt-1 ml-3 text-2xl line-clamp-2">{popup.content}</h4>
+                                        <div className="relative h-[200px] w-[100%]">
+                                            <Image 
+                                                className="rounded-lg" 
+                                                src={popup.image || noImage}
+                                                alt={popup.title || "Default Image"}
+                                                layout="fill"
+                                                objectFit="cover"
+                                            />
+                                        </div>
+                                        <div className="sticky mb-3">
+                                            <p className="mt-3 ml-3 text-4xl truncate">{popup.title}</p>
+                                            <h2 className="mt-1 ml-3 text-lg truncate">{popup.email}</h2>
+                                            <h4 className="mt-1 ml-3 text-2xl line-clamp-2">{popup.content}</h4>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
