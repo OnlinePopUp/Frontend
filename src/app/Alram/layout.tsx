@@ -32,4 +32,4 @@ export default function AlramLayout({ children }: { children: React.ReactNode })
       {children}
     </div>
   );
-}
+}``
