@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState, Suspense } from "react";
 import MessageAlram from "@/components/ClientComponent/Alram/MessageAlram/MessageAlram";
+import CommentAlram from "@/components/ClientComponent/Alram/CommentAlram/CommentAlram";
 
 export default function AlramLayout({ children }: { children: React.ReactNode }) {
   const [authUpdated, setAuthUpdated] = useState(false);
@@ -27,9 +28,10 @@ export default function AlramLayout({ children }: { children: React.ReactNode })
       {isClient && (
         <Suspense fallback={<div>Loading...</div>}>
           <MessageAlram key={Number(authUpdated)} />
+          <CommentAlram key={Number(authUpdated) + 1} />
         </Suspense>
       )}
       {children}
     </div>
   );
-}``
+}
