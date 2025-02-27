@@ -120,24 +120,38 @@ const MessageAlram = () => {
   };
 
   return (
-    <div>
+    <div className="fixed bottom-4 right-20 z-50">
       {/* ✅ 받은 메시지 목록 버튼 */}
-      <button onClick={() => setIsUnreadListOpen((prev) => !prev)}>
-        📩 받은 메시지 목록 {unreadList.length > 0 && "💡💡💡"}
+      <button
+        onClick={() => setIsUnreadListOpen((prev) => !prev)}
+        className="relative flex items-center justify-center w-14 h-14 bg-gray text-white rounded-full shadow-lg transition-all hover:bg-orange animate-bounce"
+      >
+        📩
+        {unreadList.length > 0 && (
+          <span className="absolute top-0 right-0 bg-yellow text-black text-xs font-bold px-2 py-1 rounded-full">
+            {unreadList.length}
+          </span>
+        )}
       </button>
 
-      {/* ✅ 받은 메시지 리스트 (접었다/펼쳤다 가능) */}
+      {/* ✅ 받은 메시지 리스트 (펼쳤을 때) */}
       {isUnreadListOpen && (
-        <div>
+        <div className="absolute bottom-16 right-0 w-72 bg-gray shadow-lg rounded-lg p-4 border">
+          <h3 className="text-lg font-semibold text-gray-800 mb-2">📜 받은 메시지</h3>
           {unreadList.length === 0 ? (
-            <p>새 메시지가 없습니다.</p>
+            <p className="text-center text-gray-500">새 메시지가 없습니다.</p>
           ) : (
-            <ul>
+            <ul className="max-h-40 overflow-y-auto">
               {unreadList.map((item) => (
-                <li key={item.sender}>
-                  <button onClick={() => handleOpenChat(item.sender)}>
-                    {item.sender}님 ({item.count}개)
-                  </button>
+                <li
+                  key={item.sender}
+                  className="p-2 border-b last:border-none flex justify-between items-center cursor-pointer hover:bg-blue rounded-lg"
+                  onClick={() => handleOpenChat(item.sender)}
+                >
+                  <p className="text-sm font-bold">💬 {item.sender}님</p>
+                  <span className="bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                    {item.count}
+                  </span>
                 </li>
               ))}
             </ul>
@@ -148,14 +162,12 @@ const MessageAlram = () => {
       {/* ✅ 채팅창 */}
       {isChatOpen && (
         <div className="fixed inset-0 flex items-start justify-center bg-black bg-opacity-50 z-50">
-          <div className="chat-popup">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">
-              채팅창
-            </h2>
+          <div className="w-96 bg-white rounded-lg shadow-lg p-4 relative mt-16">
+            <h2 className="text-xl font-semibold text-gray-800 mb-4">채팅창</h2>
 
             {/* 채팅 기록 영역 */}
             {loading ? (
-              <p>로딩 중...</p>
+              <p className="text-center text-gray-500">로딩 중...</p>
             ) : (
               <div className="max-h-64 overflow-y-auto p-2 border rounded-lg bg-gray-100 mb-4">
                 {messages.map((msg, index) => (
@@ -172,14 +184,20 @@ const MessageAlram = () => {
             )}
 
             {/* 메시지 입력 및 전송 영역 */}
-            <div className="chat-messageinput">
+            <div className="flex items-center gap-2">
               <input
                 type="text"
                 placeholder="메시지를 입력하세요..."
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
+                className="flex-grow p-2 border rounded-lg"
               />
-              <button onClick={sendMessage}>전송</button>
+              <button
+                onClick={sendMessage}
+                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700"
+              >
+                전송
+              </button>
             </div>
 
             {/* 채팅창 닫기 버튼 */}

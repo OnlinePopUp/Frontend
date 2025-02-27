@@ -88,7 +88,7 @@ const CommentAlram = () => {
       {/* ✅ 알림 버튼 */}
       <button
         onClick={toggleNotifications}
-        className="relative flex items-center justify-center w-14 h-14 bg-gray text-white rounded-full shadow-lg transition-all hover:bg-gray-400 animate-bounce"
+        className="relative flex items-center justify-center w-14 h-14 bg-gray text-white rounded-full shadow-lg transition-all hover:bg-orange animate-bounce"
       >
         🔔
         {unreadList.length > 0 && (

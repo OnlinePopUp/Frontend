@@ -1,123 +1,123 @@
-/* ✅ 알림 버튼 위치 고정 및 최상단 배치 */
-.comment-alarm-container {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 9999; /* ✅ 가장 위에 위치하도록 설정 */
+.fixed-bottom-right {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  z-index: 50;
+}
+
+/* ✅ 알림 버튼 */
+.notification-button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 14;
+  height: 14;
+  background-color: gray;
+  color: white;
+  border-radius: 50%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.2s;
+  animation: bounce 1s infinite;
+}
+
+.notification-button:hover {
+  background-color: orange;
+}
+
+.unread-count {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: yellow;
+  color: black;
+  font-size: 0.75rem;
+  font-weight: bold;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+}
+
+/* ✅ 알림 목록 */
+.notification-list {
+  position: absolute;
+  bottom: 4rem;
+  right: 0;
+  width: 18rem;
+  background-color: gray;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  border: 1px solid #ccc;
+}
+
+.notification-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 0.5rem;
+}
+
+.notification-list ul {
+  max-height: 10rem;
+  overflow-y: auto;
+}
+
+.notification-item {
+  padding: 0.5rem;
+  border-bottom: 1px solid #ccc;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s;
+}
+
+.notification-item:last-child {
+  border-bottom: none;
+}
+
+.notification-item:hover {
+  background-color: #3b82f6;
+}
+
+.notification-post-id {
+  font-size: 0.875rem;
+  font-weight: bold;
+}
+
+.notification-count {
+  background-color: #3b82f6;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: bold;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+}
+
+/* ✅ 알림 지우기 버튼 */
+.clear-button {
+  width: 100%;
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  text-align: center;
+  background-color: rgb(156, 163, 175);
+  border-radius: 0.5rem;
+  color: black;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.clear-button:hover {
+  background-color: red;
+}
+
+/* ✅ 애니메이션 */
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
   }
-  
-  /* ✅ 알림 버튼 스타일 */
-  .comment-alarm-button {
-    width: 56px;
-    height: 56px;
-    background-color: #6b7280; /* bg-gray */
-    color: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.2s ease-in-out;
-    animation: bounce 1.5s infinite;
+  50% {
+    transform: translateY(-5px);
   }
-  
-  .comment-alarm-button:hover {
-    background-color: #4b5563; /* hover:bg-gray-400 */
-  }
-  
-  /* ✅ 알림 개수 배지 */
-  .comment-alarm-badge {
-    position: absolute;
-    top: 0;
-    right: 0;
-    background-color: #facc15; /* bg-yellow */
-    color: black;
-    font-size: 12px;
-    font-weight: bold;
-    padding: 2px 6px;
-    border-radius: 50%;
-  }
-  
-  /* ✅ 알림 목록 스타일 */
-  .comment-alarm-list {
-    position: absolute;
-    bottom: 80px; /* 버튼 위로 띄우기 */
-    right: 0;
-    width: 18rem;
-    background-color: #6b7280; /* bg-gray */
-    color: white;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    padding: 1rem;
-    border: 1px solid #4b5563;
-  }
-  
-  /* ✅ 알림 목록 내부 스타일 */
-  .comment-alarm-list h3 {
-    font-size: 1.1rem;
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-  }
-  
-  .comment-alarm-list ul {
-    max-height: 160px;
-    overflow-y: auto;
-  }
-  
-  /* ✅ 알림 항목 스타일 */
-  .comment-alarm-item {
-    padding: 8px;
-    border-bottom: 1px solid #4b5563;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-    border-radius: 4px;
-    transition: background-color 0.2s ease-in-out;
-  }
-  
-  .comment-alarm-item:last-child {
-    border-bottom: none;
-  }
-  
-  .comment-alarm-item:hover {
-    background-color: #3b82f6; /* hover:bg-blue */
-  }
-  
-  /* ✅ 알림 개수 표시 */
-  .comment-alarm-count {
-    background-color: #2563eb; /* bg-blue-500 */
-    color: white;
-    font-size: 12px;
-    font-weight: bold;
-    padding: 2px 6px;
-    border-radius: 50%;
-  }
-  
-  /* ✅ 알림 지우기 버튼 */
-  .comment-alarm-clear {
-    width: 100%;
-    margin-top: 8px;
-    padding: 10px;
-    text-align: center;
-    background-color: #9ca3af; /* bg-gray-400 */
-    color: black;
-    font-weight: bold;
-    border-radius: 6px;
-    transition: background-color 0.2s ease-in-out;
-  }
-  
-  .comment-alarm-clear:hover {
-    background-color: #6b7280; /* hover:bg-gray-500 */
-  }
-  
-  /* ✅ 애니메이션 (버튼 흔들림 효과) */
-  @keyframes bounce {
-    0%, 100% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-5px);
-    }
-  }
-  
+}

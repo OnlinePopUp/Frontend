@@ -5,15 +5,17 @@ import CommentAlram from "@/components/ClientComponent/Alram/CommentAlram/Commen
 
 export default function AlramLayout({ children }: { children: React.ReactNode }) {
   const [authUpdated, setAuthUpdated] = useState(false);
-  const [isClient, setIsClient] = useState(false); // ✅ 클라이언트 여부 상태 추가
+  const [isClient, setIsClient] = useState(false);
+  const [hasAccessToken, setHasAccessToken] = useState(false); // ✅ accessToken 여부 확인
 
   useEffect(() => {
-    setIsClient(true); // ✅ 클라이언트에서만 실행되도록 설정
+    setIsClient(true);
+    setHasAccessToken(!!localStorage.getItem("accessToken")); // ✅ accessToken 확인
 
-    // ✅ localStorage 변경 감지 -> 알람 자동 새로고침
     const handleStorageChange = () => {
       console.log("🔄 로그인 정보 변경 감지됨, 알람 업데이트");
-      setAuthUpdated((prev) => !prev); // 상태 변경 트리거
+      setAuthUpdated((prev) => !prev);
+      setHasAccessToken(!!localStorage.getItem("accessToken")); // ✅ accessToken 변경 감지
     };
 
     window.addEventListener("storage", handleStorageChange);
@@ -24,8 +26,7 @@ export default function AlramLayout({ children }: { children: React.ReactNode })
 
   return (
     <div>
-      {/* ✅ 서버 사이드에서는 렌더링 안 되도록 체크 */}
-      {isClient && (
+      {isClient && hasAccessToken && (
         <Suspense fallback={<div>Loading...</div>}>
           <MessageAlram key={Number(authUpdated)} />
           <CommentAlram key={Number(authUpdated) + 1} />
