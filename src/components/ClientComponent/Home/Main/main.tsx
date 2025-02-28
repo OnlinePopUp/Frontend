@@ -19,7 +19,6 @@ interface Popup {
   image: string;
 }
 
-// ✅ 카테고리별 배경 이미지 매핑
 const categoryBackgrounds: { [key: string]: string } = {
   "IT": "/it.jpg",
   "스포츠": "/sports.jpg",
@@ -36,32 +35,20 @@ const Main: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // ✅ 날짜 포맷 함수 (YYYY년 MM월 DD일 형식)
   const formatDate = (dateString: string) => {
     if (!dateString) return "날짜 미정";
     return new Intl.DateTimeFormat("ko-KR", { year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date(dateString));
   };
 
-  // ✅ 배열을 무작위로 섞고 3개 선택하는 함수
   const shuffleArray = (array: Popup[]) => {
     return array.sort(() => Math.random() - 0.5).slice(0, 3);
   };
 
-  // ✅ API 요청 함수
   const fetchPopups = useCallback(async () => {
     setLoading(true);
     try {
-      const accessToken = localStorage.getItem("accessToken");
-      if (!accessToken) {
-        console.warn("🚨 accessToken이 없습니다. 로그인이 필요합니다.");
-        return;
-      }
-
       console.log("🔹 API 요청 시작...");
-      const response = await axios.get(`/popup/all?category=전체&page=0&size=100`, {
-        headers: { Authorization: `${accessToken}` },
-      });
-
+      const response = await axios.get(`/popup/all?category=전체&page=0&size=100`);
       console.log("✅ API 응답 데이터:", response.data);
 
       if (response.data && Array.isArray(response.data)) {
@@ -79,7 +66,6 @@ const Main: React.FC = () => {
     }
   }, []);
 
-  // ✅ 최초 실행 시 데이터 요청
   useEffect(() => {
     fetchPopups();
   }, [fetchPopups]);
@@ -96,7 +82,6 @@ const Main: React.FC = () => {
             key={popup.popId} 
             className="relative w-full max-w-4xl mx-auto p-6 mb-10 rounded-lg shadow-xl overflow-hidden"
           >
-            {/* ✅ 카테고리별 배경 이미지 적용 */}
             <div className="absolute inset-0">
               <Image
                 src={categoryBackgrounds[popup.category] || "/noImage.png"}
@@ -107,7 +92,6 @@ const Main: React.FC = () => {
               />
             </div>
 
-            {/* ✅ 팝업 정보 박스 */}
             <div className="relative z-10 text-center">
               <h2 className="text-3xl font-semibold text-blue-600 hover:underline hover:text-blue-800 transition-all cursor-pointer">
                 {popup.title}
@@ -118,7 +102,6 @@ const Main: React.FC = () => {
               </p>
             </div>
 
-            {/* ✅ 팝업 정보 카드 */}
             <div className="relative z-10 bg-white p-6 rounded-lg shadow-lg flex flex-col items-center mt-4">
               <Image
                 src={popup.image || "/noImage.png"}
