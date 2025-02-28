@@ -67,7 +67,7 @@ jobs:
           source: .
           target: /home/ubuntu/client
 
-# 
+
       - name: SSH로 EC2에 접속 후, 기존 프로세스를 종료하고 Next.js 실행 
         uses: appleboy/ssh-action@v1.2.0
         with:
