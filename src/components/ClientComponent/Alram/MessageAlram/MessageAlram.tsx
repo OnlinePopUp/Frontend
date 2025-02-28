@@ -40,7 +40,7 @@ const MessageAlram = () => {
       webSocketFactory: () => socket,
       reconnectDelay: 5000,
       onConnect: () => {
-        console.log("✅ WebSocket 연결 성공!");
+        console.log("✅ WebSocket 연결 성공! (MessageAlram)");
 
         stompClient.current?.subscribe(`/chat/sub/${userEmail}`, (response) => {
           let chatMessage;

@@ -92,8 +92,8 @@ const Main: React.FC = () => {
               />
             </div>
 
-            <div className="relative z-10 text-center">
-              <h2 className="text-3xl font-semibold text-blue-600 hover:underline hover:text-blue-800 transition-all cursor-pointer">
+            <div className="relative  text-center">
+              <h2 className="text-3xl font-semibold text-blue-600 transition-all">
                 {popup.title}
               </h2>
               <p className="text-lg text-gray-700 mt-2">{popup.content}</p>
@@ -102,7 +102,7 @@ const Main: React.FC = () => {
               </p>
             </div>
 
-            <div className="relative z-10 bg-white p-6 rounded-lg shadow-lg flex flex-col items-center mt-4">
+            <div className="relative bg-white p-6 rounded-lg shadow-lg flex flex-col items-center mt-4">
               <Image
                 src={popup.image || "/noImage.png"}
                 alt={popup.title || "이미지 없음"}

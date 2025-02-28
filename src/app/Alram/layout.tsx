@@ -2,6 +2,8 @@
 import React, { useEffect, useState, Suspense } from "react";
 import MessageAlram from "@/components/ClientComponent/Alram/MessageAlram/MessageAlram";
 import CommentAlram from "@/components/ClientComponent/Alram/CommentAlram/CommentAlram";
+import PurchaseAlram from "@/components/ClientComponent/Alram/PurchaseAlram/PurchaseAlram";
+
 
 export default function AlramLayout({ children }: { children: React.ReactNode }) {
   const [authUpdated, setAuthUpdated] = useState(false);
@@ -30,6 +32,7 @@ export default function AlramLayout({ children }: { children: React.ReactNode })
         <Suspense fallback={<div>Loading...</div>}>
           <MessageAlram key={Number(authUpdated)} />
           <CommentAlram key={Number(authUpdated) + 1} />
+          <PurchaseAlram key={Number(authUpdated) + 2} />
         </Suspense>
       )}
       {children}

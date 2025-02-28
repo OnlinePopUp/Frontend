@@ -35,7 +35,7 @@ const CommentAlram = () => {
       webSocketFactory: () => socket,
       reconnectDelay: 5000,
       onConnect: () => {
-        console.log("✅ WebSocket 연결 성공! (댓글 알람 & 메시지 공통)");
+        console.log("✅ WebSocket 연결 성공! (댓글 알람)");
 
         // ✅ 같은 경로에서 메시지 & 댓글 수신
         stompClient.current?.subscribe(`/chat/sub/${userEmail}`, (response) => {
