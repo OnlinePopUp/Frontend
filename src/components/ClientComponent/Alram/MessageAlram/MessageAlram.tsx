@@ -182,7 +182,7 @@ const MessageAlram = () => {
                 ))}
               </div>
             )}
-
+            {/*  */}
             {/* 메시지 입력 및 전송 영역 */}
             <div className="flex items-center gap-2">
               <input
