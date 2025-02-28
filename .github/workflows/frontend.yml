@@ -67,9 +67,7 @@ jobs:
           source: .
           target: /home/ubuntu/client
 
-      - name: 빌드 디렉토리 초기화
-        run: rm -rf .next node_modules
-
+# 
       - name: SSH로 EC2에 접속 후, 기존 프로세스를 종료하고 Next.js 실행 
         uses: appleboy/ssh-action@v1.2.0
         with:
@@ -79,10 +77,6 @@ jobs:
           script_stop: true
           script: |
             cd /home/ubuntu/client
-
-            echo "🚀 기존 빌드 및 의존성 삭제"
-            rm -rf .next node_modules
-            
             npm install
             npm run build
             sudo systemctl restart nginx
