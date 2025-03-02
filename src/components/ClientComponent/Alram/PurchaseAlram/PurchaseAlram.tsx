@@ -10,7 +10,7 @@ const PurchaseAlram = () => {
   const userEmail = localStorage.getItem("userEmail");
   const stompClient = useRef<Client | null>(null);
   const [purchaseMessage, setPurchaseMessage] = useState<string>("");
-// 
+
   useEffect(() => {
     if (!userEmail) return;
     const socket = new SockJS("http://13.213.242.176:8081/chat/ws");
